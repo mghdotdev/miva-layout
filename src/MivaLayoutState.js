@@ -1,4 +1,7 @@
 import MivaLayout from './MivaLayout';
+import isEqual from 'lodash.isequal';
+import cloneDeep from 'lodash.clonedeep';
+import identity from 'lodash.identity';
 
 export default class MivaLayoutState {
 
@@ -10,14 +13,15 @@ export default class MivaLayoutState {
 		}
 
 		// validate defaultComponentState
-		var defaultComponentStateFactory = ( typeof defaultComponentState == 'function' ) ?
+		let defaultComponentStateFactory = ( typeof defaultComponentState == 'function' ) ?
 			defaultComponentState :
-			function() {
-				return ( typeof defaultComponentState == 'object') ? Object.assign( {}, defaultComponentState ) : defaultComponentState;
+			() => {
+				return ( typeof defaultComponentState == 'object') ? cloneDeep( defaultComponentState ) : defaultComponentState;
 			};
 		
 		this.$components = layout.$components;
 		this.defaultState = this._createDefaultState( defaultComponentStateFactory );
+		this.state = this.defaultState;
 
 	}
 
@@ -26,37 +30,35 @@ export default class MivaLayoutState {
 	mergeState( stateObject, conflictResolutionFn ) {
 
 		if ( typeof conflictResolutionFn != 'function' ) {
-			conflictResolutionFn = x => { x };
+			conflictResolutionFn = identity;
 		}
 
-		this.state = Object.keys( this.defaultState ).map(( key ) => {
+		this.state = Object.keys( this.state ).map(( key ) => {
 
-			var defaultComponentState = this.defaultState[ key ];
-			var savedComponentState = stateObject[ key ];
+			let activeComponentState = this.state[ key ];
+			let componentState = stateObject[ key ];
 
-			console.log( defaultComponentState, savedComponentState );
-
-			// console.log( defaultComponentState, savedComponentState );
-
-			/*var defaultComponentState = this.defaultState[ component.id ];
-			var savedState = stateObject[ component.id ];
-
-			if ( savedState == undefined ) {
-
-				return { ...defaultComponentState };
-
+			// validate format for state object parts
+			if (
+				isEqual( activeComponentState, componentState ) ||
+				( typeof componentState !== 'object' )
+			)
+			{
+				return activeComponentState;
 			}
 
-			// check if attributes are the same
-			if ( defaultComponentState.attributes ) {
+			// console.log( componentState, activeComponentState );
 
-			}*/
+			// compare attributes
+			var activeComponentStateAttributeKeys = Object.keys( activeComponentState.attributes );
+
+			console.log( activeComponentStateAttributeKeys );
 
 			/*return {
-				type: defaultComponentState.type,
-				attributes: defaultComponentState.attributes,
-				data: conflictResolutionFn( savedState, defaultComponentState, component );
-			};*/
+				type: activeComponentState.type,
+				attributes: { ...activeComponentState },
+				data: conflictResolutionFn( activeComponentState, componentState,  )
+			}*/
 
 		});
 
@@ -66,7 +68,7 @@ export default class MivaLayoutState {
 
 	_createDefaultState( defaultComponentStateFactory ) {
 
-		return this.$components.reduce(function( defaultState, component ) {
+		return this.$components.reduce(( defaultState, component ) => {
 
 			return {
 				...defaultState,

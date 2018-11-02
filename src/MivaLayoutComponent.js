@@ -39,7 +39,7 @@ export default class MivaLayoutComponent {
 
 		if ( typeof attributes == 'object' ) {
 
-			return Object.keys( attributes ).reduce((modifiedAttrs, attrKey ) => {
+			return Object.keys( attributes ).reduce(( modifiedAttrs, attrKey ) => {
 
 				let formattedAttrKey = camelCase( attrKey ); 
 
