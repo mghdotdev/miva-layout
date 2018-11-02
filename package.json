@@ -1,0 +1,31 @@
+{
+  "name": "miva-layout",
+  "version": "0.1.0",
+  "description": "A set of classes to assist with working on Miva Component & Layouts based applications.",
+  "main": "./src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open"
+  },
+  "keywords": [
+    "miva",
+    "layouts",
+    "components"
+  ],
+  "author": "Max Hegler",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}
