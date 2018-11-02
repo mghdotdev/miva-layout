@@ -21,39 +21,24 @@ export default class MivaLayoutState {
 
 	}
 
-	_createDefaultState( defaultComponentStateFactory ) {
-
-		return this.$components.reduce(function( defaultState, component ) {
-
-			return {
-				...defaultState,
-				[ component.id ]: {
-					type: component.type,
-					attributes: { ...component.attributes },
-					data: defaultComponentStateFactory( component )
-				}
-			};
-
-		}, {});
-
-	}
+	/* ================================ Public Methods ================================ */
 
 	mergeState( stateObject, conflictResolutionFn ) {
 
-		var self = this;
-
 		if ( typeof conflictResolutionFn != 'function' ) {
-			conflictResolutionFn = function( arg ) { return arg; };
+			conflictResolutionFn = x => { x };
 		}
 
-		self.state = Object.keys( self.defaultState ).map(function( key ) {
+		this.state = Object.keys( this.defaultState ).map(( key ) => {
 
-			var defaultComponentState = self.defaultState[ key ];
+			var defaultComponentState = this.defaultState[ key ];
 			var savedComponentState = stateObject[ key ];
+
+			console.log( defaultComponentState, savedComponentState );
 
 			// console.log( defaultComponentState, savedComponentState );
 
-			/*var defaultComponentState = self.defaultState[ component.id ];
+			/*var defaultComponentState = this.defaultState[ component.id ];
 			var savedState = stateObject[ component.id ];
 
 			if ( savedState == undefined ) {
@@ -74,6 +59,25 @@ export default class MivaLayoutState {
 			};*/
 
 		});
+
+	}
+
+	/* ================================ Private Methods ================================ */
+
+	_createDefaultState( defaultComponentStateFactory ) {
+
+		return this.$components.reduce(function( defaultState, component ) {
+
+			return {
+				...defaultState,
+				[ component.id ]: {
+					type: component.type,
+					attributes: { ...component.attributes },
+					data: defaultComponentStateFactory( component )
+				}
+			};
+
+		}, {});
 
 	}
 

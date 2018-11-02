@@ -1,10 +1,9 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
+import cloneDeep from 'lodash.clonedeep';
 
 export default class MivaLayout {
 
 	constructor( layout ) {
-
-		var self = this;
 
 		// validate layout object type
 		if ( !Array.isArray( layout ) ) {
@@ -12,34 +11,42 @@ export default class MivaLayout {
 		}
 
 		// assign layout argument to private property
-		self.$layout = { ...layout };
+		this.$layout = cloneDeep( layout );
 
 		// create finalized components structure
-		self.components = new MivaLayoutComponentTree( layout );
+		this.components = new MivaLayoutComponentTree( layout );
 
 		// create flat version
-		self.$components = self._createFlatComponentsList( self.components );
+		this.$components = this._createFlatComponentsList( this.components );
 
 	}
 
 	/* ================================ Public Methods ================================ */
 
-	toJSON() {
-		return this.components;
-	}
+	
 
 	/* ================================ Private Methods ================================ */
 
 	_createFlatComponentsList( components ) {
 
-		var self = this;
-
-		return components.reduce(function( flat, component ) {
+		/*return components.reduce(function( flat, component ) {
 
 			return flat.concat( component, self._createFlatComponentsList( component.children ) );
 
+		}, []);*/
+
+		return components.reduce(( flat, component ) => {
+
+			return flat.concat( components, this._createFlatComponentsList( component.children ) );
+
 		}, []);
 
+	}
+
+	/* ================================ Special Methods ================================ */
+
+	toJSON() {
+		return this.components;
 	}
 
 };

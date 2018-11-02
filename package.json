@@ -7,13 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "webpack-dev-server --open"
+    "demo": "webpack-dev-server --open"
   },
   "keywords": [
     "miva",
     "layouts",
     "components"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mghweb/miva-layout"
+  },
   "author": "Max Hegler",
   "license": "ISC",
   "devDependencies": {
@@ -26,6 +30,7 @@
     "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
-    "lodash.camelcase": "^4.3.0"
+    "lodash.camelcase": "^4.3.0",
+    "lodash.clonedeep": "^4.5.0"
   }
 }

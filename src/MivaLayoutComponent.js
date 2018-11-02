@@ -5,47 +5,47 @@ export default class MivaLayoutComponent {
 
 	constructor( component ) {
 
-		var self = this;
-
 		// validate component object type
 		if ( typeof component != 'object' ) {
 			throw new TypeError( '[MivaLayoutComponent] - "component" is not an object' );
 		}
 
 		// Standard properties
-		self.active = component.active;
-		self.id = component.id;
-		self.componentId = component.component_id;
-		self.componentImage = component.component.image;
-		self.componentDescription = component.component.descrip;
-		self.layoutId = component.layout_id;
-		self.parentId = component.parent;
-		self.name = component.name;
-		self.type = component.component.code;
-		self.typeName = component.component.name;
-		self.childrenCount = ( component.children_count == undefined ) ? 0 : component.children_count;
+		this.active = component.active;
+		this.id = component.id;
+		this.componentId = component.component_id;
+		this.componentImage = component.component.image;
+		this.componentDescription = component.component.descrip;
+		this.layoutId = component.layout_id;
+		this.parentId = component.parent;
+		this.name = component.name;
+		this.type = component.component.code;
+		this.typeName = component.component.name;
+		this.childrenCount = ( component.children_count == undefined ) ? 0 : component.children_count;
 
 		// special attributes structure
-		self.attributes = self._createAttributes( component.attributes );
+		this.attributes = this._createAttributes( component.attributes );
 
 		// special children structure
-		self.children = new MivaLayoutComponentTree( component.children );
+		this.children = new MivaLayoutComponentTree( component.children );
 
 	}
 
-	_createAttributes( attributes ) {
+	/* ================================ Public Methods ================================ */
 
-		var self = this;
+	/* ================================ Private Methods ================================ */
+
+	_createAttributes( attributes ) {
 
 		if ( typeof attributes == 'object' ) {
 
-			return Object.keys( attributes ).reduce(function( modifiedAttrs, attrKey ) {
+			return Object.keys( attributes ).reduce((modifiedAttrs, attrKey ) => {
 
-				var formattedAttrKey = camelCase( attrKey ); 
+				let formattedAttrKey = camelCase( attrKey ); 
 
 				return {
 					...modifiedAttrs,
-					[ formattedAttrKey ]: self._formatAttributeValue( attributes[ attrKey ] )
+					[ formattedAttrKey ]: this._formatAttributeValue( attributes[ attrKey ] )
 				};
 
 			}, {});
@@ -57,8 +57,6 @@ export default class MivaLayoutComponent {
 	}
 
 	_formatAttributeValue( attribute ) {
-
-		var self = this;
 
 		if (
 			(attribute.value == '') ||

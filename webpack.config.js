@@ -3,7 +3,7 @@ const webpack = require( 'webpack' );
 const UglifyJSPlugin = require( 'uglifyjs-webpack-plugin' );
 
 module.exports = {
-	mode: 'production',
+	mode: 'development',
 	entry: './src/main.js',
 	output: {
 		path: path.resolve( __dirname, 'dist' ),
@@ -11,7 +11,7 @@ module.exports = {
 		library: 'MivaLayout',
 		libraryTarget: 'umd',
 	},
-	optimization: {
+	/*optimization: {
 		minimizer: [
 			new UglifyJSPlugin({
 				extractComments: false,
@@ -23,7 +23,7 @@ module.exports = {
 				}
 			})
 		]
-	},
+	},*/
 	module: {
 		rules: [
 			{
@@ -43,6 +43,8 @@ module.exports = {
 	},
 	devtool: 'source-map',
 	devServer: {
-		contentBase: './'
+		contentBase: './',
+		openPage: './demo/index.html',
+		compress: true
 	}
 };
