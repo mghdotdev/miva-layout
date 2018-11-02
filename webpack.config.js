@@ -14,6 +14,7 @@ module.exports = {
 	optimization: {
 		minimizer: [
 			new UglifyJSPlugin({
+				extractComments: false,
 				sourceMap: true,
 				uglifyOptions: {
 					mangle: {

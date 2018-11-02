@@ -26,6 +26,6 @@
     "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
-    "lodash": "^4.17.11"
+    "lodash.camelcase": "^4.3.0"
   }
 }
