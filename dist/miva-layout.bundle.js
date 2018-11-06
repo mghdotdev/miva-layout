@@ -4443,11 +4443,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MivaLayoutComponentTree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MivaLayoutComponentTree */ "./src/MivaLayoutComponentTree.js");
 /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash.clonedeep */ "./node_modules/lodash.clonedeep/index.js");
 /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash_isequal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash.isequal */ "./node_modules/lodash.isequal/index.js");
+/* harmony import */ var lodash_isequal__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_isequal__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash_identity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash.identity */ "./node_modules/lodash.identity/index.js");
+/* harmony import */ var lodash_identity__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_identity__WEBPACK_IMPORTED_MODULE_3__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 
 
@@ -4472,22 +4484,69 @@ function () {
   }
   /* ================================ Public Methods ================================ */
 
-  /* ================================ Private Methods ================================ */
-
 
   _createClass(MivaLayout, [{
+    key: "createState",
+    value: function createState(defaultComponentState) {
+      // validate defaultComponentState
+      var defaultComponentStateFactory = typeof defaultComponentState == 'function' ? defaultComponentState : function () {
+        return _typeof(defaultComponentState) == 'object' ? lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1___default()(defaultComponentState) : defaultComponentState;
+      };
+      this.defaultState = this._createDefaultState(defaultComponentStateFactory);
+      this.state = this.defaultState;
+    }
+  }, {
+    key: "mergeState",
+    value: function mergeState(stateObject, conflictResolutionFn) {
+      if (typeof conflictResolutionFn != 'function') {
+        conflictResolutionFn = lodash_identity__WEBPACK_IMPORTED_MODULE_3___default.a;
+      }
+
+      for (var componentId in this.state) {
+        var activeComponentState = this.state[componentId];
+        var passedComponentState = stateObject[componentId]; // validate format for state object parts
+
+        if (lodash_isequal__WEBPACK_IMPORTED_MODULE_2___default()(activeComponentState, passedComponentState) || _typeof(passedComponentState) !== 'object') {
+          continue;
+        }
+
+        this.state[componentId] = Object.assign({}, activeComponentState, conflictResolutionFn(passedComponentState, activeComponentState, this.components.id(componentId)));
+      }
+    }
+    /* ================================ Private Methods ================================ */
+
+    /**
+     * Create a "flat" list of component objects. Used to recursively loop through all components in a layout irrespective of nesting.
+     * @param  {Object<MivaLayoutComponentTree>} components - A <MivaLayoutComponentTree> instance with nested components via the "children" property.
+     * @return {Object<Array>} - The "flattened" list of components.
+     */
+
+  }, {
     key: "_createFlatComponentsList",
     value: function _createFlatComponentsList(components) {
       var _this = this;
 
-      /*return components.reduce(function( flat, component ) {
-      		return flat.concat( component, self._createFlatComponentsList( component.children ) );
-      	}, []);*/
       return components.reduce(function (flat, component) {
         return flat.concat(components, _this._createFlatComponentsList(component.children));
       }, []);
     }
+  }, {
+    key: "_createDefaultState",
+    value: function _createDefaultState(defaultComponentStateFactory) {
+      if (typeof defaultComponentStateFactory !== 'function') {
+        throw new TypeError('[MivaLayout] - "defaultComponentStateFactory" is not a function');
+      }
+
+      return this.$components.reduce(function (defaultState, component) {
+        return _objectSpread({}, defaultState, _defineProperty({}, component.id, defaultComponentStateFactory(component)));
+      }, {});
+    }
     /* ================================ Special Methods ================================ */
+
+    /**
+     * Customize JSON stringify output for the <MivaLayout> instance
+     * @return {Object<Array>}
+     */
 
   }, {
     key: "toJSON",
@@ -4681,7 +4740,10 @@ function (_Array) {
   _createClass(MivaLayoutComponentTree, [{
     key: "id",
     value: function id(_id) {
-      if (typeof _id != 'number') {
+      // format id to a number
+      _id = parseInt(_id);
+
+      if (isNaN(_id) && typeof _id != 'number') {
         throw new TypeError('[MivaLayoutComponentTree] - "id" is not a number');
       }
 
@@ -4776,127 +4838,17 @@ function (_Array) {
 
 /***/ }),
 
-/***/ "./src/MivaLayoutState.js":
-/*!********************************!*\
-  !*** ./src/MivaLayoutState.js ***!
-  \********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MivaLayoutState; });
-/* harmony import */ var _MivaLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MivaLayout */ "./src/MivaLayout.js");
-/* harmony import */ var lodash_isequal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash.isequal */ "./node_modules/lodash.isequal/index.js");
-/* harmony import */ var lodash_isequal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_isequal__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash.clonedeep */ "./node_modules/lodash.clonedeep/index.js");
-/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_identity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash.identity */ "./node_modules/lodash.identity/index.js");
-/* harmony import */ var lodash_identity__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_identity__WEBPACK_IMPORTED_MODULE_3__);
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-
-
-
-var MivaLayoutState =
-/*#__PURE__*/
-function () {
-  function MivaLayoutState(layout, defaultComponentState) {
-    _classCallCheck(this, MivaLayoutState);
-
-    // validate layout
-    if (!(layout instanceof _MivaLayout__WEBPACK_IMPORTED_MODULE_0__["default"])) {
-      throw new Error('[MivaLayoutState] - layout is not an instance of MivaLayout');
-    } // validate defaultComponentState
-
-
-    var defaultComponentStateFactory = typeof defaultComponentState == 'function' ? defaultComponentState : function () {
-      return _typeof(defaultComponentState) == 'object' ? lodash_clonedeep__WEBPACK_IMPORTED_MODULE_2___default()(defaultComponentState) : defaultComponentState;
-    };
-    this.$components = layout.$components;
-    this.defaultState = this._createDefaultState(defaultComponentStateFactory);
-    this.state = this.defaultState;
-  }
-  /* ================================ Public Methods ================================ */
-
-
-  _createClass(MivaLayoutState, [{
-    key: "mergeState",
-    value: function mergeState(stateObject, conflictResolutionFn) {
-      var _this = this;
-
-      if (typeof conflictResolutionFn != 'function') {
-        conflictResolutionFn = lodash_identity__WEBPACK_IMPORTED_MODULE_3___default.a;
-      }
-
-      this.state = Object.keys(this.state).map(function (key) {
-        var activeComponentState = _this.state[key];
-        var componentState = stateObject[key]; // validate format for state object parts
-
-        if (lodash_isequal__WEBPACK_IMPORTED_MODULE_1___default()(activeComponentState, componentState) || _typeof(componentState) !== 'object') {
-          return activeComponentState;
-        } // console.log( componentState, activeComponentState );
-        // compare attributes
-
-
-        var activeComponentStateAttributeKeys = Object.keys(activeComponentState.attributes);
-        console.log(activeComponentStateAttributeKeys);
-        /*return {
-        	type: activeComponentState.type,
-        	attributes: { ...activeComponentState },
-        	data: conflictResolutionFn( activeComponentState, componentState,  )
-        }*/
-      });
-    }
-    /* ================================ Private Methods ================================ */
-
-  }, {
-    key: "_createDefaultState",
-    value: function _createDefaultState(defaultComponentStateFactory) {
-      return this.$components.reduce(function (defaultState, component) {
-        return _objectSpread({}, defaultState, _defineProperty({}, component.id, {
-          type: component.type,
-          attributes: _objectSpread({}, component.attributes),
-          data: defaultComponentStateFactory(component)
-        }));
-      }, {});
-    }
-  }]);
-
-  return MivaLayoutState;
-}();
-
-
-
-/***/ }),
-
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
   \*********************/
-/*! exports provided: Layout, State */
+/*! exports provided: Layout */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MivaLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MivaLayout */ "./src/MivaLayout.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Layout", function() { return _MivaLayout__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _MivaLayoutState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MivaLayoutState */ "./src/MivaLayoutState.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "State", function() { return _MivaLayoutState__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
 
 
 

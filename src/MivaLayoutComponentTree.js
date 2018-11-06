@@ -26,7 +26,10 @@ export default class MivaLayoutComponentTree extends Array {
 
 	id( id ) {
 
-		if ( typeof id != 'number' ) {
+		// format id to a number
+		id = parseInt( id );
+
+		if ( isNaN( id ) && typeof id != 'number' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "id" is not a number' );
 		}
 
