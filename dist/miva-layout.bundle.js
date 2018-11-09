@@ -4480,38 +4480,61 @@ function () {
 
     this.components = new _MivaLayoutComponentTree__WEBPACK_IMPORTED_MODULE_0__["default"](layout); // create flat version
 
-    this.$components = this._createFlatComponentsList(this.components);
+    this.$components = this._createFlatComponentsList(this.components); // create proxy handler
+
+    this._proxyHandler = {
+      get: function get(obj, prop) {
+        var value = obj[prop];
+
+        if (_typeof(value) == 'object' && value.hasOwnProperty('attributes') && value.hasOwnProperty('data')) {
+          return value.data;
+        }
+
+        return value;
+      }
+    };
   }
   /* ================================ Public Methods ================================ */
 
 
   _createClass(MivaLayout, [{
     key: "createState",
-    value: function createState(defaultComponentState) {
-      // validate defaultComponentState
-      var defaultComponentStateFactory = typeof defaultComponentState == 'function' ? defaultComponentState : function () {
-        return _typeof(defaultComponentState) == 'object' ? lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1___default()(defaultComponentState) : defaultComponentState;
+    value: function createState(defaultComponentStateData) {
+      // validate defaultComponentStateData
+      var defaultComponentStateDataFactory = typeof defaultComponentStateData == 'function' ? defaultComponentStateData : function () {
+        return _typeof(defaultComponentStateData) == 'object' ? lodash_clonedeep__WEBPACK_IMPORTED_MODULE_1___default()(defaultComponentStateData) : defaultComponentStateData;
       };
-      this.defaultState = this._createDefaultState(defaultComponentStateFactory);
+      this.defaultState = this._createDefaultState(defaultComponentStateDataFactory);
       this.state = this.defaultState;
     }
   }, {
     key: "mergeState",
     value: function mergeState(stateObject, conflictResolutionFn) {
-      if (typeof conflictResolutionFn != 'function') {
-        conflictResolutionFn = lodash_identity__WEBPACK_IMPORTED_MODULE_3___default.a;
+      /* if ( typeof conflictResolutionFn != 'function' ) {
+      	conflictResolutionFn = identity;
       }
-
-      for (var componentId in this.state) {
-        var activeComponentState = this.state[componentId];
-        var passedComponentState = stateObject[componentId]; // validate format for state object parts
-
-        if (lodash_isequal__WEBPACK_IMPORTED_MODULE_2___default()(activeComponentState, passedComponentState) || _typeof(passedComponentState) !== 'object') {
-          continue;
-        }
-
-        this.state[componentId] = Object.assign({}, activeComponentState, conflictResolutionFn(passedComponentState, activeComponentState, this.components.id(componentId)));
-      }
+      	for ( let componentId in this.state ) {
+      		let activeComponentState = this.state[ componentId ];
+      	let passedComponentState = stateObject[ componentId ];
+      		// validate format for state object parts
+      	if (
+      		isEqual( activeComponentState, passedComponentState ) ||
+      		( typeof passedComponentState !== 'object' )
+      	)
+      	{
+      		continue;
+      	}
+      		this.state[ componentId ] = Object.assign(
+      		{},
+      		activeComponentState,
+      		conflictResolutionFn( passedComponentState, activeComponentState, this.components.id( componentId ) )
+      	);
+      	} */
+    }
+  }, {
+    key: "getComponentState",
+    value: function getComponentState(componentId) {
+      return this.state[componentId];
     }
     /* ================================ Private Methods ================================ */
 
@@ -4532,14 +4555,18 @@ function () {
     }
   }, {
     key: "_createDefaultState",
-    value: function _createDefaultState(defaultComponentStateFactory) {
-      if (typeof defaultComponentStateFactory !== 'function') {
+    value: function _createDefaultState(defaultComponentStateDataFactory) {
+      if (typeof defaultComponentStateDataFactory !== 'function') {
         throw new TypeError('[MivaLayout] - "defaultComponentStateFactory" is not a function');
       }
 
-      return this.$components.reduce(function (defaultState, component) {
-        return _objectSpread({}, defaultState, _defineProperty({}, component.id, defaultComponentStateFactory(component)));
+      var defaultState = this.$components.reduce(function (defaultStateAccumulator, component) {
+        return _objectSpread({}, defaultStateAccumulator, _defineProperty({}, component.id, {
+          attributes: _objectSpread({}, component.attributes),
+          data: defaultComponentStateDataFactory(component)
+        }));
       }, {});
+      return new Proxy(defaultState, this._proxyHandler);
     }
     /* ================================ Special Methods ================================ */
 

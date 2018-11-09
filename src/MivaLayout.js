@@ -21,27 +21,44 @@ export default class MivaLayout {
 		// create flat version
 		this.$components = this._createFlatComponentsList( this.components );
 
+		// create proxy handler
+		this._proxyHandler = {
+			get: function( obj, prop ) {
+
+				let value = obj[ prop ];
+				
+				if ( typeof value == 'object' && value.hasOwnProperty( 'attributes' ) && value.hasOwnProperty( 'data' ) ) {
+
+					return value.data;
+
+				}
+
+				return value;
+
+			}
+		};
+
 	}
 
 	/* ================================ Public Methods ================================ */
 
-	createState( defaultComponentState ) {
+	createState( defaultComponentStateData ) {
 
-		// validate defaultComponentState
-		let defaultComponentStateFactory = ( typeof defaultComponentState == 'function' ) ?
-			defaultComponentState :
+		// validate defaultComponentStateData
+		let defaultComponentStateDataFactory = ( typeof defaultComponentStateData == 'function' ) ?
+			defaultComponentStateData :
 			() => {
-				return ( typeof defaultComponentState == 'object') ? cloneDeep( defaultComponentState ) : defaultComponentState;
+				return ( typeof defaultComponentStateData == 'object') ? cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
 			};
 
-		this.defaultState = this._createDefaultState( defaultComponentStateFactory );
+		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
 		this.state = this.defaultState;
 
 	}
 
 	mergeState( stateObject, conflictResolutionFn ) {
 
-		if ( typeof conflictResolutionFn != 'function' ) {
+		/* if ( typeof conflictResolutionFn != 'function' ) {
 			conflictResolutionFn = identity;
 		}
 
@@ -65,7 +82,13 @@ export default class MivaLayout {
 				conflictResolutionFn( passedComponentState, activeComponentState, this.components.id( componentId ) )
 			);
 
-		}
+		} */
+
+	}
+
+	getComponentState( componentId ) {
+
+		return this.state[ componentId ];
 
 	}
 
@@ -87,20 +110,25 @@ export default class MivaLayout {
 	}
 
 
-	_createDefaultState( defaultComponentStateFactory ) {
+	_createDefaultState( defaultComponentStateDataFactory ) {
 
-		if ( typeof defaultComponentStateFactory !== 'function' ) {
+		if ( typeof defaultComponentStateDataFactory !== 'function' ) {
 			throw new TypeError( '[MivaLayout] - "defaultComponentStateFactory" is not a function' );
 		}
 
-		return this.$components.reduce(( defaultState, component ) => {
+		let defaultState = this.$components.reduce(( defaultStateAccumulator, component ) => {
 
 			return {
-				...defaultState,
-				[ component.id ]: defaultComponentStateFactory( component )
+				...defaultStateAccumulator,
+				[ component.id ]: {
+					attributes: { ...component.attributes },
+					data: defaultComponentStateDataFactory( component )
+				}
 			};
 
 		}, {});
+
+		return new Proxy( defaultState, this._proxyHandler );
 
 	}
 

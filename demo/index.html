@@ -8,11 +8,11 @@
 
 	<div id="app">
 		<ol>
-			<addon-section
+			<cnl-component
 				v-for="addonSection in components"
 				:key="addonSection.id"
 				:component="addonSection"
-			></addon-section>
+			></cnl-component>
 		</ol>
 	</div>
 	
@@ -37,7 +37,10 @@
 
 			if ( component.type == 'product-addon-section' ) {
 
-				return {};
+				return {
+					openComponentIndex: null,
+					isOpen: false
+				};
 
 			}
 			else if ( component.type == 'product-addon-category' ) {
@@ -95,13 +98,30 @@
 
 		console.log( mivaLayout );
 
-		Vue.component( 'addon-section', {
-			props: {
-				component: {
-					type: Object,
+		Vue.component( 'cnl-component', {
+			props: [ 'component' ],
+			computed: {
+				state: function() {
+					return mivaLayout.getComponentState( this.component.id );
 				}
 			},
-			template: '<li><h2>{{ component.attributes.heading }}</h2><p>{{ component.attributes }}</p><p>{{ component.children }}</p></li>'
+			template: `
+				<li>
+					<h2>{{ component.name }}</h2>
+					<p>Attributes:</p>
+					<pre>{{ component.attributes }}</pre>
+					<p>State:</p>
+					<pre>{{ state }}</pre>
+
+					<ol>
+						<cnl-component
+							v-for="childComponent in component.children"
+							:key="childComponent.id"
+							:component="childComponent"
+						></cnl-component>
+					</ol>
+				</li>
+			`
 		});
 		
 		var app = new Vue({
