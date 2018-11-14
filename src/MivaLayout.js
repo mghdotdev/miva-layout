@@ -21,23 +21,6 @@ export default class MivaLayout {
 		// create flat version
 		this.$components = this._createFlatComponentsList( this.components );
 
-		// create proxy handler
-		this._proxyHandler = {
-			get: function( obj, prop ) {
-
-				let value = obj[ prop ];
-				
-				if ( typeof value == 'object' && value.hasOwnProperty( 'attributes' ) && value.hasOwnProperty( 'data' ) ) {
-
-					return value.data;
-
-				}
-
-				return value;
-
-			}
-		};
-
 	}
 
 	/* ================================ Public Methods ================================ */
@@ -88,7 +71,7 @@ export default class MivaLayout {
 
 	getComponentState( componentId ) {
 
-		return this.state[ componentId ];
+		return this.state[ componentId ]?.data;
 
 	}
 
@@ -103,7 +86,7 @@ export default class MivaLayout {
 
 		return components.reduce(( flat, component ) => {
 
-			return flat.concat( components, this._createFlatComponentsList( component.children ) );
+			return flat.concat( component, this._createFlatComponentsList( component.children ) );
 
 		}, []);
 
@@ -116,19 +99,17 @@ export default class MivaLayout {
 			throw new TypeError( '[MivaLayout] - "defaultComponentStateFactory" is not a function' );
 		}
 
-		let defaultState = this.$components.reduce(( defaultStateAccumulator, component ) => {
+		return this.$components.reduce(( defaultStateAccumulator, component ) => {
 
 			return {
 				...defaultStateAccumulator,
 				[ component.id ]: {
-					attributes: { ...component.attributes },
+					_attributes: { ...component.attributes },
 					data: defaultComponentStateDataFactory( component )
 				}
 			};
 
 		}, {});
-
-		return new Proxy( defaultState, this._proxyHandler );
 
 	}
 

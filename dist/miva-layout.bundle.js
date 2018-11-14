@@ -4480,19 +4480,7 @@ function () {
 
     this.components = new _MivaLayoutComponentTree__WEBPACK_IMPORTED_MODULE_0__["default"](layout); // create flat version
 
-    this.$components = this._createFlatComponentsList(this.components); // create proxy handler
-
-    this._proxyHandler = {
-      get: function get(obj, prop) {
-        var value = obj[prop];
-
-        if (_typeof(value) == 'object' && value.hasOwnProperty('attributes') && value.hasOwnProperty('data')) {
-          return value.data;
-        }
-
-        return value;
-      }
-    };
+    this.$components = this._createFlatComponentsList(this.components);
   }
   /* ================================ Public Methods ================================ */
 
@@ -4534,7 +4522,9 @@ function () {
   }, {
     key: "getComponentState",
     value: function getComponentState(componentId) {
-      return this.state[componentId];
+      var _this$state$component;
+
+      return (_this$state$component = this.state[componentId]) == null ? void 0 : _this$state$component.data;
     }
     /* ================================ Private Methods ================================ */
 
@@ -4550,7 +4540,7 @@ function () {
       var _this = this;
 
       return components.reduce(function (flat, component) {
-        return flat.concat(components, _this._createFlatComponentsList(component.children));
+        return flat.concat(component, _this._createFlatComponentsList(component.children));
       }, []);
     }
   }, {
@@ -4560,13 +4550,12 @@ function () {
         throw new TypeError('[MivaLayout] - "defaultComponentStateFactory" is not a function');
       }
 
-      var defaultState = this.$components.reduce(function (defaultStateAccumulator, component) {
+      return this.$components.reduce(function (defaultStateAccumulator, component) {
         return _objectSpread({}, defaultStateAccumulator, _defineProperty({}, component.id, {
-          attributes: _objectSpread({}, component.attributes),
+          _attributes: _objectSpread({}, component.attributes),
           data: defaultComponentStateDataFactory(component)
         }));
       }, {});
-      return new Proxy(defaultState, this._proxyHandler);
     }
     /* ================================ Special Methods ================================ */
 

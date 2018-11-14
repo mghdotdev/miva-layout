@@ -27,12 +27,29 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.m?js$/,
+				test: /\.js$/,
 				include: [/src/],
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env']
+						presets: [
+							[
+								'@babel/preset-env',
+								{
+									targets: {
+										ie: '11'
+									}
+								}
+							]
+						],
+						plugins: [
+							[
+								'@babel/plugin-proposal-optional-chaining',
+								{
+									loose: true
+								}
+							]
+						]
 					}
 				}
 			}

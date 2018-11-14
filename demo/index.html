@@ -8,16 +8,17 @@
 
 	<div id="app">
 		<ol>
-			<cnl-component
+			<addon-section
 				v-for="addonSection in components"
 				:key="addonSection.id"
-				:component="addonSection"
-			></cnl-component>
+				:addon-section="addonSection"
+			></addon-section>
 		</ol>
 	</div>
 	
 	<script src="../dist/miva-layout.bundle.js"></script>
 	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/vuex"></script>
 
 	<!-- <script src="./demo.js"></script> -->
 
@@ -67,65 +68,81 @@
 
 		});
 
-		var savedState = {
-			280: {
-				products: [ { id: 123 }],
-				quantity: 99
-			},
-			281: {
-				products: [ { id: 123 }],
-				quantity: 99
-			},
-			292: {
-				"products": [ { id: 11111111 } ],
-				"quantity": 3
-			}
-		};
+		Vue.component( 'addon-section', {
+			props: [ 'addonSection' ],
+			computed: Object.assign(
+				{
 
-		mivaLayout.mergeState( savedState, function( passedComponentState, activeComponentState, component ) {
-
-			console.groupCollapsed( 'CONFLICT!' );
-
-			console.log( 'passedComponentState', passedComponentState );
-			console.log( 'activeComponentState', activeComponentState );
-			console.log( 'component', component );
-
-			console.groupEnd();
-
-			return {};
-
-		} );
-
-		console.log( mivaLayout );
-
-		Vue.component( 'cnl-component', {
-			props: [ 'component' ],
-			computed: {
-				state: function() {
-					return mivaLayout.getComponentState( this.component.id );
+				},
+				Vuex.mapState({
+					stateData: function( state ) {
+						return state[ this.addonSection.id ].data;
+					}
+				})
+			),
+			methods: Object.assign(
+				{
+					openComponent: function( categoryId ) {
+						this.$store.commit( 'setOpenAddonCategoryId', { id: this.addonSection.id, openAddonCategoryId: categoryId } );
+					}
 				}
-			},
+			),
 			template: `
 				<li>
-					<h2>{{ component.name }}</h2>
+					<h2>{{ addonSection.name }}</h2>
+					<span>{{ addonSection.type }}</span>
 					<p>Attributes:</p>
-					<pre>{{ component.attributes }}</pre>
+					<pre>{{ addonSection.attributes }}</pre>
+
 					<p>State:</p>
-					<pre>{{ state }}</pre>
+					<pre>{{ stateData }}</pre>
 
 					<ol>
-						<cnl-component
-							v-for="childComponent in component.children"
-							:key="childComponent.id"
-							:component="childComponent"
-						></cnl-component>
+						<addon-category
+							v-for="addonCategory in addonSection.children"
+							:key="addonCategory.id"
+							:addon-category="addonCategory"
+							:open-component="openComponent"
+						></addon-category>
 					</ol>
 				</li>
 			`
 		});
+
+		Vue.component( 'addon-category', {
+			props: [ 'addonCategory', 'openComponent', 'sectionId' ],
+			template: `
+				<li>
+					<h2>{{ addonCategory.name }}</h2>
+					<span>{{ addonCategory.type }}</span>
+					<p>Attributes:</p>
+					<pre>{{ addonCategory.attributes }}</pre>
+
+					<button @click="openComponent( addonCategory.id );">Open Category</button>
+				</li>
+			`
+		});
+
+		var store = new Vuex.Store({
+			state: mivaLayout.state,
+			mutations: {
+				setOpenAddonCategoryId: function( state, payload ) {
+
+					if ( payload && payload.id ) {
+
+						var componentState = state[ payload.id ];
+
+						componentState.data.openComponentIndex = payload.openAddonCategoryId;
+
+					}
+					
+				}
+			}
+		});
 		
 		var app = new Vue({
 			el: '#app',
+			store: store,
 			data: {
 				components: mivaLayout.components
 			},
