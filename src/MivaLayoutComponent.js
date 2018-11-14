@@ -1,5 +1,5 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
-import camelCase from 'lodash.camelCase';
+import _camelCase from 'lodash.camelCase';
 
 export default class MivaLayoutComponent {
 
@@ -41,7 +41,7 @@ export default class MivaLayoutComponent {
 
 			return Object.keys( attributes ).reduce(( modifiedAttrs, attrKey ) => {
 
-				let formattedAttrKey = camelCase( attrKey ); 
+				let formattedAttrKey = _camelCase( attrKey ); 
 
 				return {
 					...modifiedAttrs,

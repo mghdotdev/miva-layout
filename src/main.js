@@ -1,3 +1,3 @@
-import Layout from './MivaLayout';
+import layout from './MivaLayout';
 
-export { Layout };
+export { layout };

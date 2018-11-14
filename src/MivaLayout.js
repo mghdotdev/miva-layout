@@ -1,22 +1,36 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
-import cloneDeep from 'lodash.clonedeep';
-import isEqual from 'lodash.isequal';
-import identity from 'lodash.identity';
+import _cloneDeep from 'lodash.clonedeep';
+import _isEqual from 'lodash.isequal';
+import _identity from 'lodash.identity';
+import _pull from 'lodash.pull';
+
+const defaultOptions = {
+	configComponentCode: 'config',
+	exposeFullConfigComponent: false,
+	pullConfigComponent: true,
+	suppressWarnings: false
+};
 
 export default class MivaLayout {
 
-	constructor( layout ) {
+	constructor( layout, options = {} ) {
 
 		// validate layout object type
 		if ( !Array.isArray( layout ) ) {
 			throw new TypeError( '[MivaLayout] - "layout" is not an array'  );
 		}
 
+		// assign options
+		this.options = Object.assign( {}, defaultOptions, options );
+
 		// assign layout argument to private property
-		this.$layout = cloneDeep( layout );
+		this.$layout = _cloneDeep( layout );
 
 		// create finalized components structure
 		this.components = new MivaLayoutComponentTree( layout );
+
+		// find "config" component - remove from tree if found
+		this.config = this._findConfigComponent( this.components );
 
 		// create flat version
 		this.$components = this._createFlatComponentsList( this.components );
@@ -31,7 +45,7 @@ export default class MivaLayout {
 		let defaultComponentStateDataFactory = ( typeof defaultComponentStateData == 'function' ) ?
 			defaultComponentStateData :
 			() => {
-				return ( typeof defaultComponentStateData == 'object') ? cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
+				return ( typeof defaultComponentStateData == 'object') ? _cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
 			};
 
 		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
@@ -42,7 +56,7 @@ export default class MivaLayout {
 	mergeState( stateObject, conflictResolutionFn ) {
 
 		/* if ( typeof conflictResolutionFn != 'function' ) {
-			conflictResolutionFn = identity;
+			conflictResolutionFn = _identity;
 		}
 
 		for ( let componentId in this.state ) {
@@ -52,7 +66,7 @@ export default class MivaLayout {
 
 			// validate format for state object parts
 			if (
-				isEqual( activeComponentState, passedComponentState ) ||
+				_isEqual( activeComponentState, passedComponentState ) ||
 				( typeof passedComponentState !== 'object' )
 			)
 			{
@@ -110,6 +124,34 @@ export default class MivaLayout {
 			};
 
 		}, {});
+
+	}
+
+	_findConfigComponent( componentTree ) {
+
+		if ( !(componentTree instanceof MivaLayoutComponentTree) ) {
+			throw new TypeError( '[MivaLayout] - "componentTree" is not a MivaLayoutComponentTree instance' );
+		}
+
+		let configComponent = componentTree.type( this.options.configComponentCode );
+
+		if ( configComponent != undefined ) {
+
+			if ( this.options.pullConfigComponent ) {
+
+				_pull( componentTree, configComponent[ 0 ] );
+
+			}
+
+			return ( this.options.exposeFullConfigComponent ) ? configComponent[ 0 ] : configComponent[ 0 ].attributes;
+
+		}
+
+		if ( !this.options.suppressWarnings ) {
+			console.warn( `[MivaLayout] - unable to find configuration component "${ this.options.configComponentCode }"` );
+		}
+
+		return {};
 
 	}
 

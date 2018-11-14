@@ -67,6 +67,16 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
+	name( name ) {
+
+		if ( typeof name != 'number' && typeof name != 'string' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "name" is not a number or string' );
+		}
+
+		return this._groupBy( 'name', name );
+
+	}
+
 	/* ================================ Private Methods ================================ */
 
 	_findBy( findKey, findVal ) {
@@ -103,6 +113,8 @@ export default class MivaLayoutComponentTree extends Array {
 
 		}
 
+		return undefined;
+
 	}
 
 	_groupBy( groupKey, groupVal ) {
@@ -114,7 +126,9 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "groupVal" is undefined' );
 		}
 
-		return this._groupByRecursion( groupKey, groupVal, this );
+		let result = this._groupByRecursion( groupKey, groupVal, this );
+
+		return ( result.length > 0 ) ? result : undefined;
 
 	}
 
