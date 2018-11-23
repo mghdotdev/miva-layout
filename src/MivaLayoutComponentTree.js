@@ -144,6 +144,5 @@ export default class MivaLayoutComponentTree extends Array {
 		}, []);
 
 	}
-	
 
 };

@@ -6,7 +6,7 @@
 </head>
 <body>
 
-	<!-- <div id="app">
+	<div id="app">
 		<ol>
 			<addon-section
 				v-for="addonSection in components"
@@ -14,11 +14,11 @@
 				:addon-section="addonSection"
 			></addon-section>
 		</ol>
-	</div> -->
+	</div>
 	
 	<script src="../dist/miva-layout.bundle.js"></script>
-	<!-- <script src="https://unpkg.com/vue"></script>
-	<script src="https://unpkg.com/vuex"></script> -->
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/vuex"></script>
 
 	<!-- <script src="./demo.js"></script> -->
 
@@ -70,9 +70,7 @@
 
 		});
 
-		var layoutWithConfig = new MivaLayout( mivaJS.layoutWithConfig );
-
-		/*Vue.component( 'addon-section', {
+		Vue.component( 'addon-section', {
 			props: [ 'addonSection' ],
 			computed: Object.assign(
 				{
@@ -128,7 +126,7 @@
 		});
 
 		var store = new Vuex.Store({
-			state: mivaLayout.state,
+			state: royalLayout.state,
 			mutations: {
 				setOpenAddonCategoryId: function( state, payload ) {
 
@@ -148,10 +146,10 @@
 			el: '#app',
 			store: store,
 			data: {
-				components: mivaLayout.components
+				components: royalLayout.components
 			},
 			templateUrl: './app.html'
-		});*/
+		});
 
 		
 

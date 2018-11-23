@@ -33,6 +33,8 @@ export default class MivaLayoutComponent {
 
 	/* ================================ Public Methods ================================ */
 
+	
+
 	/* ================================ Private Methods ================================ */
 
 	_createAttributes( attributes ) {

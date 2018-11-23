@@ -55,7 +55,7 @@ export default class MivaLayout {
 
 	mergeState( stateObject, conflictResolutionFn ) {
 
-		/* if ( typeof conflictResolutionFn != 'function' ) {
+		 if ( typeof conflictResolutionFn != 'function' ) {
 			conflictResolutionFn = _identity;
 		}
 
@@ -64,7 +64,9 @@ export default class MivaLayout {
 			let activeComponentState = this.state[ componentId ];
 			let passedComponentState = stateObject[ componentId ];
 
-			// validate format for state object parts
+			console.log( activeComponentState, passedComponentState );
+
+			/*// validate format for state object parts
 			if (
 				_isEqual( activeComponentState, passedComponentState ) ||
 				( typeof passedComponentState !== 'object' )
@@ -77,15 +79,21 @@ export default class MivaLayout {
 				{},
 				activeComponentState,
 				conflictResolutionFn( passedComponentState, activeComponentState, this.components.id( componentId ) )
-			);
+			);*/
 
-		} */
+		} 
 
 	}
 
 	getComponentState( componentId ) {
 
 		return this.state[ componentId ]?.data;
+
+	}
+
+	exportState( pretty ) {
+
+		return JSON.stringify( this.state, null, ( pretty ) ? '\t' : '' );
 
 	}
 
@@ -118,7 +126,7 @@ export default class MivaLayout {
 			return {
 				...defaultStateAccumulator,
 				[ component.id ]: {
-					_attributes: { ...component.attributes },
+					__attributes__: { ...component.attributes },
 					data: defaultComponentStateDataFactory( component )
 				}
 			};
