@@ -33,7 +33,7 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "id" is not a number' );
 		}
 
-		return this._findBy( 'id', id );
+		return this._findBy( 'id', id, deep );
 
 	}
 
@@ -43,7 +43,7 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "componentId" is not a number' );
 		}
 
-		return this._groupBy( 'componentId', componentId );
+		return this._groupBy( 'componentId', componentId, deep );
 		
 	}
 
@@ -53,7 +53,7 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "type" is not a number or string' );
 		}
 
-		return this._groupBy( 'type', type );
+		return this._groupBy( 'type', type, deep );
 
 	}
 
@@ -63,7 +63,7 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "typeName" is not a number or string' );
 		}
 
-		return this._groupBy( 'typeName', typeName );
+		return this._groupBy( 'typeName', typeName, deep );
 
 	}
 
@@ -79,7 +79,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	/* ================================ Private Methods ================================ */
 
-	_findBy( findKey, findVal ) {
+	_findBy( findKey, findVal, deep ) {
 
 		if ( findKey == undefined ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "findKey" is undefined' );
@@ -88,11 +88,11 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "findVal" is undefined' );
 		}
 
-		return this._findByRecursion( findKey, findVal, this );
+		return this._findByRecursion( findKey, findVal, this, deep );
 
 	}
 
-	_findByRecursion( findKey, findVal, components ) {
+	_findByRecursion( findKey, findVal, components, deep = true ) {
 
 		for (let i = 0; i < components.length; i++) {
 
@@ -101,7 +101,7 @@ export default class MivaLayoutComponentTree extends Array {
 				return components[ i ];
 
 			}
-			else if ( components[ i ].childrenCount ) {
+			else if ( components[ i ].childrenCount && deep ) {
 
 				let found = this._findByRecursion( findKey, findVal, components[ i ].children );
 
@@ -117,7 +117,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	_groupBy( groupKey, groupVal ) {
+	_groupBy( groupKey, groupVal, deep ) {
 
 		if ( groupKey == undefined ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "groupKey" is undefined' );
@@ -126,19 +126,19 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "groupVal" is undefined' );
 		}
 
-		let result = this._groupByRecursion( groupKey, groupVal, this );
+		let result = this._groupByRecursion( groupKey, groupVal, this, deep );
 
 		return ( result.length > 0 ) ? result : undefined;
 
 	}
 
-	_groupByRecursion( groupKey, groupVal, components ) {
+	_groupByRecursion( groupKey, groupVal, components, deep = true ) {
 
 		return components.reduce(( groupedComponents, currentComponent ) => {
 
 			return groupedComponents.concat(
 				( currentComponent[ groupKey ] == groupVal ) ? currentComponent : [],
-				this._groupByRecursion( groupKey, groupVal, currentComponent.children )
+				( deep ) ? this._groupByRecursion( groupKey, groupVal, currentComponent.children ) : []
 			);
 
 		}, []);
