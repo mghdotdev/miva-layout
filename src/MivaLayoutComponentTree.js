@@ -24,7 +24,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	/* ================================ Public Methods ================================ */
 
-	id( id ) {
+	id( id, deep ) {
 
 		// format id to a number
 		id = parseInt( id );
@@ -37,7 +37,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	componentId( componentId ) {
+	componentId( componentId, deep ) {
 
 		if ( typeof componentId != 'number' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "componentId" is not a number' );
@@ -47,7 +47,7 @@ export default class MivaLayoutComponentTree extends Array {
 		
 	}
 
-	type( type ) {
+	type( type, deep ) {
 
 		if ( typeof type != 'number' && typeof type != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "type" is not a number or string' );
@@ -57,7 +57,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	typeName( typeName ) {
+	typeName( typeName, deep ) {
 
 		if ( typeof typeName != 'number' && typeof typeName != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "typeName" is not a number or string' );
@@ -67,7 +67,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	name( name ) {
+	name( name, deep ) {
 
 		if ( typeof name != 'number' && typeof name != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "name" is not a number or string' );
