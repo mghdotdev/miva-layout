@@ -3,6 +3,7 @@ import _cloneDeep from 'lodash.clonedeep';
 import _isEqual from 'lodash.isequal';
 import _identity from 'lodash.identity';
 import _pull from 'lodash.pull';
+import _merge from 'lodash.merge';
 
 const defaultOptions = {
 	configComponentCode: 'config',
@@ -39,7 +40,7 @@ export default class MivaLayout {
 
 	/* ================================ Public Methods ================================ */
 
-	createState( defaultComponentStateData ) {
+	createState( defaultComponentStateData, includeAttributes = false ) {
 
 		// validate defaultComponentStateData
 		let defaultComponentStateDataFactory = ( typeof defaultComponentStateData == 'function' ) ?
@@ -48,7 +49,7 @@ export default class MivaLayout {
 				return ( typeof defaultComponentStateData == 'object') ? _cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
 			};
 
-		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
+		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory, includeAttributes );
 		this.state = this.defaultState;
 
 	}
@@ -64,22 +65,11 @@ export default class MivaLayout {
 			let activeComponentState = this.state[ componentId ];
 			let passedComponentState = stateObject[ componentId ];
 
-			console.log( activeComponentState, passedComponentState );
-
-			/*// validate format for state object parts
-			if (
-				_isEqual( activeComponentState, passedComponentState ) ||
-				( typeof passedComponentState !== 'object' )
-			)
-			{
-				continue;
-			}
-
 			this.state[ componentId ] = Object.assign(
 				{},
 				activeComponentState,
-				conflictResolutionFn( passedComponentState, activeComponentState, this.components.id( componentId ) )
-			);*/
+				_merge( _cloneDeep( activeComponentState ), passedComponentState )
+			);
 
 		} 
 
@@ -115,20 +105,29 @@ export default class MivaLayout {
 	}
 
 
-	_createDefaultState( defaultComponentStateDataFactory ) {
-
-		if ( typeof defaultComponentStateDataFactory !== 'function' ) {
-			throw new TypeError( '[MivaLayout] - "defaultComponentStateFactory" is not a function' );
-		}
+	_createDefaultState( defaultComponentStateDataFactory, includeAttributes ) {
 
 		return this.$components.reduce(( defaultStateAccumulator, component ) => {
 
-			return {
-				...defaultStateAccumulator,
-				[ component.id ]: {
+			let newComponentSate;
+
+			if ( includeAttributes ) {
+
+				newComponentSate = {
 					__attributes__: { ...component.attributes },
 					data: defaultComponentStateDataFactory( component )
-				}
+				};
+
+			}
+			else {
+
+				newComponentSate = defaultComponentStateDataFactory( component );
+
+			}
+
+			return {
+				...defaultStateAccumulator,
+				[ component.id ]: newComponentSate
 			};
 
 		}, {});
