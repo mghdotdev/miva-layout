@@ -1,9 +1,8 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
 import _cloneDeep from 'lodash.clonedeep';
 import _isEqual from 'lodash.isequal';
-import _identity from 'lodash.identity';
 import _pull from 'lodash.pull';
-import _merge from 'lodash.merge';
+import objectHash from 'object-hash';
 
 const defaultOptions = {
 	configComponentCode: 'config',
@@ -40,7 +39,7 @@ export default class MivaLayout {
 
 	/* ================================ Public Methods ================================ */
 
-	createState( defaultComponentStateData, includeAttributes = false ) {
+	createState( defaultComponentStateData ) {
 
 		// validate defaultComponentStateData
 		let defaultComponentStateDataFactory = ( typeof defaultComponentStateData == 'function' ) ?
@@ -49,35 +48,51 @@ export default class MivaLayout {
 				return ( typeof defaultComponentStateData == 'object') ? _cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
 			};
 
-		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory, includeAttributes );
+		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
 		this.state = this.defaultState;
 
 	}
 
-	mergeState( stateObject, conflictResolutionFn ) {
+	mergeState( stateObject ) {
 
-		 if ( typeof conflictResolutionFn != 'function' ) {
-			conflictResolutionFn = _identity;
+		if ( stateObject == undefined || typeof stateObject != 'object' ) {
+			return console.warn( '[MivaLayout] - "stateObject" is not an object' );
 		}
+
+		let state = {};
 
 		for ( let componentId in this.state ) {
 
 			let activeComponentState = this.state[ componentId ];
 			let passedComponentState = stateObject[ componentId ];
 
-			this.state[ componentId ] = Object.assign(
+			if ( activeComponentState.__attributes__ !== passedComponentState?.__attributes__ ) {
+
+				state[ componentId ] = Object.assign(
+					{},
+					passedComponentState,
+					activeComponentState
+				);
+
+				continue;
+
+			}
+
+			state[ componentId ] = Object.assign(
 				{},
 				activeComponentState,
-				_merge( _cloneDeep( activeComponentState ), passedComponentState )
+				passedComponentState
 			);
 
-		} 
+		}
+
+		this.state = _cloneDeep( state );
 
 	}
 
 	getComponentState( componentId ) {
 
-		return this.state[ componentId ]?.data;
+		return this.state[ componentId ];
 
 	}
 
@@ -105,29 +120,16 @@ export default class MivaLayout {
 	}
 
 
-	_createDefaultState( defaultComponentStateDataFactory, includeAttributes ) {
+	_createDefaultState( defaultComponentStateDataFactory ) {
 
 		return this.$components.reduce(( defaultStateAccumulator, component ) => {
 
-			let newComponentSate;
-
-			if ( includeAttributes ) {
-
-				newComponentSate = {
-					__attributes__: { ...component.attributes },
-					data: defaultComponentStateDataFactory( component )
-				};
-
-			}
-			else {
-
-				newComponentSate = defaultComponentStateDataFactory( component );
-
-			}
-
 			return {
 				...defaultStateAccumulator,
-				[ component.id ]: newComponentSate
+				[ component.id ]: {
+					...defaultComponentStateDataFactory( component ),
+					__attributes__: objectHash( component.attributes )
+				}
 			};
 
 		}, {});

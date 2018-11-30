@@ -18,11 +18,6 @@
 
 	<div id="merge">
 		
-		<h1>{{ title }}</h1>
-		<small>{{ version }}</small>
-
-		<hr>
-
 		<textarea @input="saveState( layoutState );" v-model="layoutState" style="width: 100%; height: 500px;"></textarea>
 
 	</div>
@@ -43,9 +38,9 @@
 
 	<script>
 
-		/*var royalLayout = new MivaLayout( mivaJS.royalLayout );
+		var layout = new MivaLayout( mivaJS.royalLayout );
 
-		royalLayout.createState(function( component ) {
+		layout.createState(function( component ) {
 
 			if ( component.type == 'product-addon-section' ) {
 
@@ -79,9 +74,7 @@
 
 		});
 
-		console.log( royalLayout );*/
-
-		var layout = new MivaLayout( mivaJS.layoutWithConfig );
+		/*var layout = new MivaLayout( mivaJS.layoutWithConfig );
 
 		layout.createState(function( component ) {
 
@@ -89,36 +82,21 @@
 				ts: 1543016755626
 			};
 
-		});
+		});*/
 
-		var savedState = JSON.parse( localStorage.getItem( layout.config.storageKey ) );
-
-		if ( savedState != undefined ) {
-
-			layout.mergeState(
-				savedState,
-				function() {
-
-					console.log( arguments );
-
-				}
-			);
-
-		}
+		layout.mergeState( JSON.parse( localStorage.getItem( 'test' ) ) );
 
 		
 
 		var merge = new Vue({
 			el: '#merge',
 			data: {
-				layoutState: layout.exportState( true ),
-				title: layout.config.appTitle,
-				version: layout.config.version
+				layoutState: layout.exportState( true )
 			},
 			methods: {
 				saveState: function( state ) {
 
-					var success = localStorage.setItem( layout.config.storageKey, state );
+					var success = localStorage.setItem( 'test', state );
 
 					console.log( 'Saved!', success );
 
