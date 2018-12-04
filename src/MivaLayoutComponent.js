@@ -1,5 +1,5 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
-import _camelCase from 'lodash.camelCase';
+import _camelCase from 'lodash/camelcase';
 
 export default class MivaLayoutComponent {
 

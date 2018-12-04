@@ -1,7 +1,6 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
-import _cloneDeep from 'lodash.clonedeep';
-import _isEqual from 'lodash.isequal';
-import _pull from 'lodash.pull';
+import _cloneDeep from 'lodash/clonedeep';
+import _pull from 'lodash/pull';
 import objectHash from 'object-hash';
 
 const defaultOptions = {
@@ -66,7 +65,7 @@ export default class MivaLayout {
 			let activeComponentState = this.state[ componentId ];
 			let passedComponentState = stateObject[ componentId ];
 
-			if ( activeComponentState.__attributes__ !== passedComponentState?.__attributes__ ) {
+			if ( passedComponentState && activeComponentState && activeComponentState.__attributes__ !== passedComponentState.__attributes__ ) {
 
 				state[ componentId ] = Object.assign(
 					{},

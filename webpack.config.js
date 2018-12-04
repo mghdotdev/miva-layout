@@ -1,11 +1,12 @@
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const UglifyJSPlugin = require( 'uglifyjs-webpack-plugin' );
+const LodashModuleReplacementPlugin = require( 'lodash-webpack-plugin' );
 
 module.exports = {
 	mode: 'production',
 	entry: [
-		'./src/main.js'
+		'./src/MivaLayout.js'
 	],
 	output: {
 		path: path.resolve( __dirname, 'dist' ),
@@ -44,20 +45,15 @@ module.exports = {
 									}
 								}
 							]
-						],
-						plugins: [
-							[
-								'@babel/plugin-proposal-optional-chaining',
-								{
-									loose: true
-								}
-							]
 						]
 					}
 				}
 			}
 		]
 	},
+	plugins: [
+		new LodashModuleReplacementPlugin
+	],
 	stats: {
 		colors: true
 	},
