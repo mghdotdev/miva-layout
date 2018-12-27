@@ -24,7 +24,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	/* ================================ Public Methods ================================ */
 
-	id( id, deep ) {
+	findById( id, deep ) {
 
 		// format id to a number
 		id = parseInt( id );
@@ -37,7 +37,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	componentId( componentId, deep ) {
+	findByComponentId( componentId, deep ) {
 
 		if ( typeof componentId != 'number' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "componentId" is not a number' );
@@ -47,7 +47,7 @@ export default class MivaLayoutComponentTree extends Array {
 		
 	}
 
-	type( type, deep ) {
+	groupByType( type, deep ) {
 
 		if ( typeof type != 'number' && typeof type != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "type" is not a number or string' );
@@ -57,7 +57,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	typeName( typeName, deep ) {
+	groupByTypeName( typeName, deep ) {
 
 		if ( typeof typeName != 'number' && typeof typeName != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "typeName" is not a number or string' );
@@ -67,17 +67,133 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	name( name, deep ) {
+	groupByName( name, deep ) {
 
 		if ( typeof name != 'number' && typeof name != 'string' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "name" is not a number or string' );
 		}
 
-		return this._groupBy( 'name', name );
+		return this._groupBy( 'name', name, deep );
+
+	}
+
+	groupByAttribute( key, value, deep ) {
+
+		if ( typeof name != 'number' && typeof name != 'string' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "key" is not a number or string' );
+		}
+
+		return this._groupByAttributeRecursion( key, value, this, deep );
+
+	}
+
+	findByAttribute( key, value, deep ) {
+
+		if ( typeof name != 'number' && typeof name != 'string' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "key" is not a number or string' );
+		}
+
+		return this._findByAttributeRecursion( key, value, this, deep );
+
+	}
+
+	groupByParent( component, groupKey, groupVal ) {
+
+		if ( !component instanceof MivaLayoutComponent ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "component" is not an instance of "MivaLayoutComponent"' );
+		}
+		if ( groupKey == undefined ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "groupKey" is undefined' );
+		}
+		if ( groupVal == 'undefined' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "groupVal" is undefined' );
+		}
+
+		let group = [];
+		let parentComponent = component;
+
+		while ( parentComponent != undefined ) {
+
+			if ( parentComponent[ groupKey ] == groupVal ) {
+				group.push( parentComponent );
+			}
+
+			parentComponent = this.findById( parentComponent.parentId );
+
+		}
+
+		return group;
+
+	}
+
+	groupByParentAttribute( component, groupKey, groupVal ) {
+
+		if ( !component instanceof MivaLayoutComponent ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "component" is not an instance of "MivaLayoutComponent"' );
+		}
+		if ( groupKey == undefined ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "groupKey" is undefined' );
+		}
+		if ( groupVal == 'undefined' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "groupVal" is undefined' );
+		}
+
+		let group = [];
+		let parentComponent = component;
+
+		while ( parentComponent != undefined ) {
+
+			if ( parentComponent.attributes[ groupKey ] == groupVal ) {
+				group.push( parentComponent );
+			}
+
+			parentComponent = this.findById( parentComponent.parentId );
+
+		}
+
+		return group;
 
 	}
 
 	/* ================================ Private Methods ================================ */
+
+	_groupByAttributeRecursion( groupKey, groupVal, components, deep = false ) {
+
+		return components.reduce(( groupedComponents, currentComponent ) => {
+
+			return groupedComponents.concat(
+				( currentComponent.attributes && currentComponent.attributes[ groupKey ] == groupVal ) ? currentComponent : [],
+				( deep ) ? this._groupByAttributeRecursion( groupKey, groupVal, currentComponent.children ) : []
+			);
+
+		}, []);
+
+	}
+
+	_findByAttributeRecursion( findKey, findVal, components, deep = false ) {
+
+		for (let i = 0; i < components.length; i++) {
+
+			if ( components[ i ].attributes && components[ i ].attributes[ findKey ] == findVal ) {
+
+				return components[ i ];
+
+			}
+			else if ( components[ i ].childrenCount && deep ) {
+
+				let found = this._findByAttributeRecursion( findKey, findVal, components[ i ].children );
+
+				if ( found != undefined ) {
+					return found;
+				}
+
+			}
+
+		}
+
+		return undefined;
+
+	}
 
 	_findBy( findKey, findVal, deep ) {
 

@@ -95,6 +95,32 @@ export default class MivaLayout {
 
 	}
 
+	setComponentState( componentId, stateObject ) {
+
+		return this.state[ componentId ] = stateObject;
+
+	}
+
+	syncState( components ) {
+
+		if ( !Array.isArray( components ) && !(components instanceof MivaLayoutComponentTree) ) {
+			throw new TypeError( '[MivaLayout] - "components" is not an array or instance of "MivaLayoutComponentTree"'  );
+		}
+
+		if ( components.length == 0 ) {
+			throw new Error( '[MivaLayout] - "components" does not have sufficient length' );
+		}
+
+		var keyState = this.getComponentState( components[ 0 ].id );
+
+		for ( let component of components ) {
+			
+			this.setComponentState( component.id, keyState );
+
+		}
+
+	}
+
 	exportState( pretty ) {
 
 		return JSON.stringify( this.state, null, ( pretty ) ? '\t' : '' );
@@ -141,7 +167,7 @@ export default class MivaLayout {
 			throw new TypeError( '[MivaLayout] - "componentTree" is not a MivaLayoutComponentTree instance' );
 		}
 
-		let configComponent = componentTree.type( this.options.configComponentCode );
+		let configComponent = componentTree.groupByType( this.options.configComponentCode );
 
 		if ( configComponent != undefined ) {
 
