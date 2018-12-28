@@ -26,6 +26,24 @@ var layout = new MivaLayout( jsonObject [, options ] );
 | pullConfigComponent | `:::js true` | Whether or not to remove the Config component when found within the Layout. Defaults to `:::js true`. |
 | suppressWarnings | `:::js false` | Suppresses all warnings outputted to the console. Defaults to `:::js false`.  |
 
+<br>
+
+---
+
+<br>
+
+## Properties
+
+| Key | Type | Details |
+| --- | --- | --- |
+| options | `:::js Object` | Structure containing the currently active options. |
+| $layout | `:::js Array|Object` | The original layout array/object passed in the constructor. |
+| components | `:::js Array.<MivaLayoutComponentTree>` | The optimized array layout via a [MivaLayoutComponentTree](/MivaLayoutComponentTree/) instance. |
+| $components | `:::js Object` | A dictionary style "flat" component list. |
+| config | `:::js Object.<MivaLayoutComponent>` | The identified "config" component from the layout tree. |
+| defaultState | `:::js Object` | The initial State Object created after running the `createState` method. |
+| state | `:::js Object` | The current and active State Object. Created after running the `createState` method. |
+
 ## Methods
 
 ### `createState( defaultComponentStateData );`

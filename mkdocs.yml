@@ -11,13 +11,11 @@ nav:
     - State Object: MivaLayout/StateObject.md
     - Examples: MivaLayout/examples.md
   - MivaLayoutComponentTree:
-    - Overview: MivaLayoutComponentTree/overview.md
-    - Properties: MivaLayoutComponentTree/properties.md
-    - Methods: MivaLayoutComponentTree/methods.md
+    - Class Information: MivaLayoutComponentTree/index.md
+    - Examples: MivaLayoutComponentTree/examples.md
   - MivaLayoutComponent:
-    - Overview: MivaLayoutComponent/overview.md
-    - Properties: MivaLayoutComponent/properties.md
-    - Methods: MivaLayoutComponent/methods.md
+    - Class Information: MivaLayoutComponent/index.md
+    - Examples: MivaLayoutComponent/examples.md
 
 theme:
   name: material
