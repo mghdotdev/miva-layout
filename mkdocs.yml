@@ -5,16 +5,30 @@ repo_url: 'https://github.com/mghweb/miva-layout'
 repo_name: 'GitHub'
 
 nav:
-  - Overview: index.md
+  - About: index.md
+  - MivaLayout:
+    - Class Information: MivaLayout/index.md
+    - State Object: MivaLayout/StateObject.md
+    - Examples: MivaLayout/examples.md
+  - MivaLayoutComponentTree:
+    - Overview: MivaLayoutComponentTree/overview.md
+    - Properties: MivaLayoutComponentTree/properties.md
+    - Methods: MivaLayoutComponentTree/methods.md
+  - MivaLayoutComponent:
+    - Overview: MivaLayoutComponent/overview.md
+    - Properties: MivaLayoutComponent/properties.md
+    - Methods: MivaLayoutComponent/methods.md
 
 theme:
   name: material
+  feature:
+    tabs: true
   palette:
     primary: 'red'
     accent: 'cyan'
   logo:
-    icon: 'import_contacts'
-  font: false
+    icon: 'dashboard'
+  favicon: /images/favicon.ico
 
 plugins:
   - search

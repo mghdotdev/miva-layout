@@ -95,9 +95,9 @@ export default class MivaLayout {
 
 	}
 
-	setComponentState( componentId, stateObject ) {
+	setComponentState( componentId, componentState ) {
 
-		return this.state[ componentId ] = stateObject;
+		return this.state[ componentId ] = componentState;
 
 	}
 
