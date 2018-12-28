@@ -36,11 +36,60 @@ Create a MivaLayout [State Object](/MivaLayout/StateObject/). A [State Object](/
 
 | Param | Type | Details |
 | --- | --- | --- |
-| | | |
+| defaultComponentStateData | `:::js Function|Object` | Accepts either an object or a function. The value returned from the function will be used as the `defaultState` within the layout for each Component Data Object within the State Object. |
+
+!!! Note "Developer Note"
+    When using an object literal all components will __NOT__ share the same reference to the object. The object literal will be cloned before assigning to each component slot. If you would like to share state between components, use the [syncState](#syncstate-components) function.
 
 #### Returns
 
 `:::js undefined` &emsp;&mdash;&emsp; No return specified.
+
+#### Examples
+
+```js tab="as Function"
+var layout = new MivaLayout( json );
+
+// creating state with a function
+layout.createState(function( component ) {
+    
+    // reference to each "component" within the layout
+
+    if ( component.type == 'myComponentType' ) {
+
+        return {
+            myComponentData: 'Hello World!'
+        };
+
+    }
+
+    return {};
+
+});
+
+// - output
+{
+    101: { myComponentData: 'Hello World!', ... },
+    102: { ... },
+    103: { ... },
+    ...
+}
+```
+
+```js tab="as Object"
+var layout = new MivaLayout( json );
+
+// creating state with a basic object
+layout.createState( { key: 'value' } );
+
+// - output
+{
+    101: { key: 'value', ... },
+    102: { key: 'value', ... },
+    103: { key: 'value', ... },
+    ...
+}
+```
 
 ---
 
@@ -52,7 +101,7 @@ Attempts to merge the current state with the passed parameter. The attributes ha
 
 | Param | Type | Details |
 | --- | --- | --- |
-| | | |
+| stateObject | `:::js Object` | The State Object to be merged. |
 
 #### Returns
 
@@ -95,11 +144,13 @@ Overwrite a specific component's state data object by ID.
 
 ### `syncState( components );`
 
+Overwrites the passed array of `MivaLayoutComponent` instances current Component State Data with the first component within the array. The objects will be linked by reference and changes made to one will update all.
+
 #### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| | | |
+| components | `:::js Array.<MivaLayoutComponent>` | Array of `MivaLayoutComponent` instances to be synced. |
 
 #### Returns
 
@@ -107,17 +158,19 @@ Overwrite a specific component's state data object by ID.
 
 ---
 
-### `exportState( [pretty] );`
+### `exportState( [ pretty ] );`
+
+Returns a JSON string of the current State Object. Use the optional `pretty` parameter to format the JSON string. 
 
 #### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| | | |
+| pretty _(optional)_ | `:::js Boolean` | Add a `\t` character as the whitespace insertion character. Defaults to `false`. Optional. |
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+`:::js String` &emsp;&mdash;&emsp; Stringified JSON State Object.
 
 ---
 
