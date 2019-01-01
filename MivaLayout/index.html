@@ -67,6 +67,8 @@
     <link rel="stylesheet" href="../assets/fonts/material-icons.css">
     
     
+      <link rel="stylesheet" href="../css/type-hint.css">
+    
     
   </head>
   
@@ -1060,12 +1062,12 @@
 <tbody>
 <tr>
 <td>layout</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>A JSON object form of a loaded Layout. See <a href="/MivaLayout/examples">Examples</a> for an example of how to obtain this JSON object.</td>
 </tr>
 <tr>
 <td>options <em>(optional)</em></td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>An optional configuration object that lets you customize the MivaLayout Class settings.</td>
 </tr>
 </tbody>
@@ -1117,38 +1119,38 @@
 <tbody>
 <tr>
 <td>options</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>Structure containing the currently active options.</td>
 </tr>
 <tr>
 <td>$layout</td>
-<td><code class="codehilite"><span class="nb">Array</span><span class="o">|</span><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span><span class="type-hint-array">Array</span></td>
 <td>The original layout array/object passed in the constructor.</td>
 </tr>
 <tr>
 <td>components</td>
-<td><code class="codehilite"><span class="nb">Array</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">MivaLayoutComponentTree</span><span class="o">&gt;</span></code></td>
+<td><span class="type-hint-array">Array.&lt;MivaLayoutComponentTree&gt;</span></td>
 <td>The optimized array layout via a <a href="/MivaLayoutComponentTree/">MivaLayoutComponentTree</a> instance.</td>
 </tr>
 <tr>
 <td>$components</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>A dictionary style "flat" component list.</td>
 </tr>
 <tr>
 <td>config</td>
-<td><code class="codehilite"><span class="nb">Object</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">MivaLayoutComponent</span><span class="o">&gt;</span></code></td>
+<td><span class="type-hint-object">Object.&lt;MivaLayoutComponent&gt;</span></td>
 <td>The identified "config" component from the layout tree.</td>
 </tr>
 <tr>
 <td>defaultState</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
-<td>The initial State Object created after running the <code class="codehilite">createState</code> method.</td>
+<td><span class="type-hint-object">Object</span></td>
+<td>The initial State Object created after running the <code class="codehilite"><span class="nx">createState</span></code> method.</td>
 </tr>
 <tr>
 <td>state</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
-<td>The current and active State Object. Created after running the <code class="codehilite">createState</code> method.</td>
+<td><span class="type-hint-object">Object</span></td>
+<td>The current and active State Object. Created after running the <code class="codehilite"><span class="nx">createState</span></code> method.</td>
 </tr>
 </tbody>
 </table>
@@ -1167,7 +1169,7 @@
 <tbody>
 <tr>
 <td>defaultComponentStateData</td>
-<td><code class="codehilite"><span class="nb">Function</span><span class="o">|</span><span class="nb">Object</span></code></td>
+<td><span class="type-hint-function">Function</span><span class="type-hint-object">Object</span></td>
 <td>Accepts either an object or a function. The value returned from the function will be used as the <code class="codehilite">defaultState</code> within the layout for each Component Data Object within the State Object.</td>
 </tr>
 </tbody>
@@ -1177,7 +1179,7 @@
 <p>When using an object literal all components will <strong>NOT</strong> share the same reference to the object. The object literal will be cloned before assigning to each component slot. If you would like to share state between components, use the <a href="#syncstate-components">syncState</a> function.</p>
 </div>
 <h4 id="returns">Returns<a class="headerlink" href="#returns" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; No return specified.</p>
+<p><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.</p>
 <h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h4>
 <div class="superfences-tabs">
 <input name="__tabs_1" type="radio" id="__tab_1_0" checked="checked" />
@@ -1240,13 +1242,13 @@
 <tbody>
 <tr>
 <td>stateObject</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>The State Object to be merged.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="returns_1">Returns<a class="headerlink" href="#returns_1" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; No return specified.</p>
+<p><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.</p>
 <hr />
 <h3 id="getcomponentstate-componentid"><code class="codehilite">getComponentState( componentId );</code><a class="headerlink" href="#getcomponentstate-componentid" title="Permanent link">#</a></h3>
 <p>Retreive a specific Component's state data from the <a href="/MivaLayout/StateObject/">State Object</a> by ID.</p>
@@ -1262,13 +1264,13 @@
 <tbody>
 <tr>
 <td>componentId</td>
-<td><code class="codehilite"><span class="nb">Number</span></code></td>
+<td><span class="type-hint-number">Number</span></td>
 <td>A number representing a component's ID present within the State Object.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="returns_2">Returns<a class="headerlink" href="#returns_2" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="nb">Object</span><span class="o">|</span><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; The component data object. <code class="codehilite"><span class="kc">undefined</span></code> if not found.</p>
+<p><span class="type-hint-object">Object</span><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; The component data object. <span class="type-hint-undefined">undefined</span> if not found.</p>
 <hr />
 <h3 id="setcomponentstate-componentid-componentstate"><code class="codehilite">setComponentState( componentId, componentState );</code><a class="headerlink" href="#setcomponentstate-componentid-componentstate" title="Permanent link">#</a></h3>
 <p>Overwrite a specific component's state data object by ID.</p>
@@ -1284,18 +1286,18 @@
 <tbody>
 <tr>
 <td>componentId</td>
-<td><code class="codehilite"><span class="nb">Number</span></code></td>
+<td><span class="type-hint-number">Number</span></td>
 <td>A number representing a component's ID present within the State Object.</td>
 </tr>
 <tr>
 <td>componentState</td>
-<td><code class="codehilite"><span class="nb">Object</span></code></td>
+<td><span class="type-hint-object">Object</span></td>
 <td>A component state data object. Must contain a hash of the component's attributes object at the <code class="codehilite"><span class="nx">__attributes__</span></code> key.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="returns_3">Returns<a class="headerlink" href="#returns_3" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; No return specified.</p>
+<p><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.</p>
 <hr />
 <h3 id="syncstate-components"><code class="codehilite">syncState( components );</code><a class="headerlink" href="#syncstate-components" title="Permanent link">#</a></h3>
 <p>Overwrites the passed array of <code class="codehilite">MivaLayoutComponent</code> instances current Component State Data with the first component within the array. The objects will be linked by reference and changes made to one will update all.</p>
@@ -1311,13 +1313,13 @@
 <tbody>
 <tr>
 <td>components</td>
-<td><code class="codehilite"><span class="nb">Array</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">MivaLayoutComponent</span><span class="o">&gt;</span></code></td>
+<td><span class="type-hint-object">Array.&lt;MivaLayoutComponent&gt;</span></td>
 <td>Array of <code class="codehilite">MivaLayoutComponent</code> instances to be synced.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="returns_4">Returns<a class="headerlink" href="#returns_4" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; No return specified.</p>
+<p><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.</p>
 <hr />
 <h3 id="exportstate-pretty"><code class="codehilite">exportState( [ pretty ] );</code><a class="headerlink" href="#exportstate-pretty" title="Permanent link">#</a></h3>
 <p>Returns a JSON string of the current State Object. Use the optional <code class="codehilite">pretty</code> parameter to format the JSON string. </p>
@@ -1339,14 +1341,14 @@
 </tbody>
 </table>
 <h4 id="returns_5">Returns<a class="headerlink" href="#returns_5" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="nb">String</span></code> &emsp;&mdash;&emsp; Stringified JSON State Object.</p>
+<p><span class="type-hint-string">String</span> &emsp;&mdash;&emsp; Stringified JSON State Object.</p>
 <hr />
 <h3 id="tojson"><code class="codehilite">toJSON();</code><a class="headerlink" href="#tojson" title="Permanent link">#</a></h3>
 <p>A special method that overwrites the default <code class="codehilite"><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span></code> output. See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior">toJSON() Behavior</a> for more information.</p>
 <h4 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">#</a></h4>
 <p>None.</p>
 <h4 id="returns_6">Returns<a class="headerlink" href="#returns_6" title="Permanent link">#</a></h4>
-<p><code class="codehilite"><span class="kc">undefined</span></code> &emsp;&mdash;&emsp; No return specified.</p>
+<p><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.</p>
 <hr />
                 
                   
