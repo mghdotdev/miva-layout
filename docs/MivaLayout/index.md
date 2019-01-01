@@ -14,8 +14,8 @@ var layout = new MivaLayout( jsonObject [, options ] );
 
 | Param | Type | Details |
 | --- | --- | --- |
-| layout | `:::js Object` | A JSON object form of a loaded Layout. See [Examples](/MivaLayout/examples) for an example of how to obtain this JSON object. |
-| options _(optional)_ | `:::js Object` | An optional configuration object that lets you customize the MivaLayout Class settings. |
+| layout | <span class="type-hint-object">Object</span> | A JSON object form of a loaded Layout. See [Examples](/MivaLayout/examples) for an example of how to obtain this JSON object. |
+| options _(optional)_ | <span class="type-hint-object">Object</span> | An optional configuration object that lets you customize the MivaLayout Class settings. |
 
 ### Options
 
@@ -36,13 +36,13 @@ var layout = new MivaLayout( jsonObject [, options ] );
 
 | Key | Type | Details |
 | --- | --- | --- |
-| options | `:::js Object` | Structure containing the currently active options. |
-| $layout | `:::js Array|Object` | The original layout array/object passed in the constructor. |
-| components | `:::js Array.<MivaLayoutComponentTree>` | The optimized array layout via a [MivaLayoutComponentTree](/MivaLayoutComponentTree/) instance. |
-| $components | `:::js Object` | A dictionary style "flat" component list. |
-| config | `:::js Object.<MivaLayoutComponent>` | The identified "config" component from the layout tree. |
-| defaultState | `:::js Object` | The initial State Object created after running the `createState` method. |
-| state | `:::js Object` | The current and active State Object. Created after running the `createState` method. |
+| options | <span class="type-hint-object">Object</span> | Structure containing the currently active options. |
+| $layout | <span class="type-hint-object">Object</span><span class="type-hint-array">Array</span> | The original layout array/object passed in the constructor. |
+| components | <span class="type-hint-array">Array.&lt;MivaLayoutComponentTree&gt;</span> | The optimized array layout via a [MivaLayoutComponentTree](/MivaLayoutComponentTree/) instance. |
+| $components | <span class="type-hint-object">Object</span> | A dictionary style "flat" component list. |
+| config | <span class="type-hint-object">Object.&lt;MivaLayoutComponent&gt;</span> | The identified "config" component from the layout tree. |
+| defaultState | <span class="type-hint-object">Object</span> | The initial State Object created after running the `:::js createState` method. |
+| state | <span class="type-hint-object">Object</span> | The current and active State Object. Created after running the `:::js createState` method. |
 
 ## Methods
 
@@ -54,14 +54,14 @@ Create a MivaLayout [State Object](/MivaLayout/StateObject/). A [State Object](/
 
 | Param | Type | Details |
 | --- | --- | --- |
-| defaultComponentStateData | `:::js Function|Object` | Accepts either an object or a function. The value returned from the function will be used as the `defaultState` within the layout for each Component Data Object within the State Object. |
+| defaultComponentStateData | <span class="type-hint-function">Function</span><span class="type-hint-object">Object</span> | Accepts either an object or a function. The value returned from the function will be used as the `defaultState` within the layout for each Component Data Object within the State Object. |
 
 !!! Note "Developer Note"
     When using an object literal all components will __NOT__ share the same reference to the object. The object literal will be cloned before assigning to each component slot. If you would like to share state between components, use the [syncState](#syncstate-components) function.
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 #### Examples
 
@@ -119,11 +119,11 @@ Attempts to merge the current state with the passed parameter. The attributes ha
 
 | Param | Type | Details |
 | --- | --- | --- |
-| stateObject | `:::js Object` | The State Object to be merged. |
+| stateObject | <span class="type-hint-object">Object</span> | The State Object to be merged. |
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 ---
 
@@ -135,11 +135,11 @@ Retreive a specific Component's state data from the [State Object](/MivaLayout/S
 
 | Param | Type | Details |
 | --- | --- | --- |
-| componentId | `:::js Number` | A number representing a component's ID present within the State Object. |
+| componentId | <span class="type-hint-number">Number</span> | A number representing a component's ID present within the State Object. |
 
 #### Returns
 
-`:::js Object|undefined` &emsp;&mdash;&emsp; The component data object. `:::js undefined` if not found.
+<span class="type-hint-object">Object</span><span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; The component data object. <span class="type-hint-undefined">undefined</span> if not found.
 
 ---
 
@@ -151,12 +151,12 @@ Overwrite a specific component's state data object by ID.
 
 | Param | Type | Details |
 | --- | --- | --- |
-| componentId | `:::js Number` | A number representing a component's ID present within the State Object. |
-| componentState | `:::js Object` | A component state data object. Must contain a hash of the component's attributes object at the `:::js __attributes__` key. |
+| componentId | <span class="type-hint-number">Number</span> | A number representing a component's ID present within the State Object. |
+| componentState | <span class="type-hint-object">Object</span> | A component state data object. Must contain a hash of the component's attributes object at the `:::js __attributes__` key. |
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 ---
 
@@ -168,11 +168,11 @@ Overwrites the passed array of `MivaLayoutComponent` instances current Component
 
 | Param | Type | Details |
 | --- | --- | --- |
-| components | `:::js Array.<MivaLayoutComponent>` | Array of `MivaLayoutComponent` instances to be synced. |
+| components | <span class="type-hint-object">Array.&lt;MivaLayoutComponent&gt;</span> | Array of `MivaLayoutComponent` instances to be synced. |
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 ---
 
@@ -188,7 +188,7 @@ Returns a JSON string of the current State Object. Use the optional `pretty` par
 
 #### Returns
 
-`:::js String` &emsp;&mdash;&emsp; Stringified JSON State Object.
+<span class="type-hint-string">String</span> &emsp;&mdash;&emsp; Stringified JSON State Object.
 
 ---
 
@@ -202,7 +202,7 @@ None.
 
 #### Returns
 
-`:::js undefined` &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 
 ---

@@ -1,8 +1,8 @@
 site_name: miva-layout.js - API Documentation
 site_author: Max Hegler
-site_url: 'https://mghweb.github.io/miva-layout/'
-repo_url: 'https://github.com/mghweb/miva-layout'
-repo_name: 'GitHub'
+site_url: https://mghweb.github.io/miva-layout/
+repo_url: https://github.com/mghweb/miva-layout
+repo_name: GitHub
 
 nav:
   - About: index.md
@@ -22,11 +22,14 @@ theme:
   feature:
     tabs: true
   palette:
-    primary: 'red'
-    accent: 'cyan'
+    primary: red
+    accent: cyan
   logo:
-    icon: 'dashboard'
+    icon: dashboard
   favicon: /images/favicon.ico
+
+extra_css:
+  - css/type-hint.css
 
 plugins:
   - search

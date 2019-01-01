@@ -1,0 +1,66 @@
+/*
+	Used to display type information in tables
+	FROM:
+		https://docs.angularjs.org
+*/
+
+[class*="type-hint-"] {
+	display: inline-block;
+	background: gray;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+
+	min-width: 60px;
+	margin: 1px 5px;
+}
+
+[class*="type-hint-"] + [class*="type-hint-"] {
+	margin-top: 5px;
+}
+
+.type-hint-mixed {
+	background: purple;
+}
+
+.type-hint-date {
+	background: pink;
+}
+
+.type-hint-string {
+	background: #3a87ad;
+}
+
+.type-hint-function {
+	background: green;
+}
+
+.type-hint-object {
+	background: #999;
+}
+
+.type-hint-array {
+	background: #F90;;
+}
+
+.type-hint-boolean {
+	background: rgb(18, 131, 39);
+}
+
+.type-hint-number {
+	background: rgb(189, 63, 66);
+}
+
+.type-hint-regexp {
+	background: rgb(90, 84, 189);
+}
+
+.type-hint-domelement {
+	background: rgb(95, 158, 160);
+}
