@@ -2,42 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://mghweb.github.io/miva-layout/</loc>
-     <lastmod>2018-12-31</lastmod>
+     <lastmod>2019-01-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://mghweb.github.io/miva-layout/MivaLayout/</loc>
-     <lastmod>2018-12-31</lastmod>
+     <lastmod>2019-01-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://mghweb.github.io/miva-layout/MivaLayout/properties/</loc>
+     <lastmod>2019-01-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://mghweb.github.io/miva-layout/MivaLayout/methods/</loc>
+     <lastmod>2019-01-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://mghweb.github.io/miva-layout/MivaLayout/StateObject/</loc>
-     <lastmod>2018-12-31</lastmod>
+     <lastmod>2019-01-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://mghweb.github.io/miva-layout/MivaLayout/examples/</loc>
-     <lastmod>2018-12-31</lastmod>
+     <loc>https://mghweb.github.io/miva-layout/MivaLayoutComponentTree/</loc>
+     <lastmod>2019-01-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc></loc>
-     
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc></loc>
-     
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc></loc>
-     
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc></loc>
-     
+     <loc>https://mghweb.github.io/miva-layout/MivaLayoutComponent/</loc>
+     <lastmod>2019-01-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
