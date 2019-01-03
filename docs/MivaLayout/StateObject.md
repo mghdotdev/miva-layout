@@ -1,8 +1,10 @@
-# State Object
+# [Classes](/) → [MivaLayout](/MivaLayout) : State Object
 
 ---
 
 ## Overview
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex ullam repellendus doloremque, explicabo velit esse dignissimos, id, magnam nihil eligendi omnis ipsam sed ipsa quibusdam itaque aliquam enim commodi impedit.
 
 ## Structure
 
