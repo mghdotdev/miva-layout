@@ -50,6 +50,8 @@ export default class MivaLayout {
 		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
 		this.state = this.defaultState;
 
+		return this;
+
 	}
 
 	mergeState( stateObject ) {
@@ -87,6 +89,8 @@ export default class MivaLayout {
 
 		this.state = _cloneDeep( state );
 
+		return this;
+
 	}
 
 	getComponentState( componentId ) {
@@ -118,6 +122,8 @@ export default class MivaLayout {
 			this.setComponentState( component.id, keyState );
 
 		}
+
+		return this;
 
 	}
 

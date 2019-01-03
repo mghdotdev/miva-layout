@@ -15,7 +15,7 @@ Create a MivaLayout [State Object](/MivaLayout/StateObject/). A [State Object](/
 
 ### Returns
 
-<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-object">Object.&lt;MivaLayout&gt;</span> &emsp;&mdash;&emsp; Returns the current MivaLayout instance to allow method chaining.
 
 ### Examples
 
@@ -77,7 +77,7 @@ Attempts to merge the current state with the passed parameter. The attributes ha
 
 ### Returns
 
-<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-object">Object.&lt;MivaLayout&gt;</span> &emsp;&mdash;&emsp; Returns the current MivaLayout instance to allow method chaining.
 
 ---
 
@@ -110,7 +110,7 @@ Overwrite a specific component's state data object by ID.
 
 ### Returns
 
-<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-object">Object.&lt;MivaLayout&gt;</span> &emsp;&mdash;&emsp; Returns the current MivaLayout instance to allow method chaining.
 
 ---
 
@@ -126,7 +126,7 @@ Overwrites the passed array of `MivaLayoutComponent` instances current Component
 
 ### Returns
 
-<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
+<span class="type-hint-object">Object.&lt;MivaLayout&gt;</span> &emsp;&mdash;&emsp; Returns the current MivaLayout instance to allow method chaining.
 
 ---
 
@@ -143,19 +143,5 @@ Returns a JSON string of the current State Object. Use the optional `pretty` par
 ### Returns
 
 <span class="type-hint-string">String</span> &emsp;&mdash;&emsp; Stringified JSON State Object.
-
----
-
-## `toJSON();`
-
-A special method that overwrites the default `:::js JSON.stringify` output. See [toJSON() Behavior](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior) for more information.
-
-### Parameters
-
-None.
-
-### Returns
-
-<span class="type-hint-undefined">undefined</span> &emsp;&mdash;&emsp; No return specified.
 
 ---
