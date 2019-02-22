@@ -8,6 +8,7 @@ module.exports = {
 	entry: [
 		'./src/MivaLayout.js'
 	],
+	target: 'web',
 	output: {
 		path: path.resolve( __dirname, 'dist' ),
 		filename: 'miva-layout.bundle.js',

@@ -1,16 +1,17 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
+import MivaLayoutComponent from './MivaLayoutComponent';
 import _cloneDeep from 'lodash/clonedeep';
 import _pull from 'lodash/pull';
 import objectHash from 'object-hash';
 
 const defaultOptions = {
-	configComponentCode: 'config',
-	exposeFullConfigComponent: false,
-	pullConfigComponent: true,
+	settingsComponentCode: 'settings',
+	exposeFullSettingsComponent: false,
+	pullSettingsComponent: true,
 	suppressWarnings: false
 };
 
-export default class MivaLayout {
+const MivaLayout = class MivaLayout {
 
 	constructor( layout, options = {} ) {
 
@@ -26,19 +27,19 @@ export default class MivaLayout {
 		this.$layout = _cloneDeep( layout );
 
 		// create finalized components structure
-		this.components = new MivaLayoutComponentTree( layout );
-
-		// find "config" component - remove from tree if found
-		this.config = this._findConfigComponent( this.components );
+		this.components = new MivaLayoutComponentTree( layout, this );
 
 		// create flat version
 		this.$components = this._createFlatComponentsList( this.components );
+
+		// find "settings" component - remove from tree if found
+		this.settings = this._findSettingsComponent( this.components );
 
 	}
 
 	/* ================================ Public Methods ================================ */
 
-	createState( defaultComponentStateData ) {
+	createStore( defaultComponentStateData ) {
 
 		// validate defaultComponentStateData
 		let defaultComponentStateDataFactory = ( typeof defaultComponentStateData == 'function' ) ?
@@ -47,29 +48,28 @@ export default class MivaLayout {
 				return ( typeof defaultComponentStateData == 'object') ? _cloneDeep( defaultComponentStateData ) : defaultComponentStateData;
 			};
 
-		this.defaultState = this._createDefaultState( defaultComponentStateDataFactory );
-		this.state = this.defaultState;
+		this.store = this._createStore( defaultComponentStateDataFactory );
 
 		return this;
 
 	}
 
-	mergeState( stateObject ) {
+	mergeStore( storeObject ) {
 
-		if ( stateObject == undefined || typeof stateObject != 'object' ) {
-			return console.warn( '[MivaLayout] - "stateObject" is not an object' );
+		if ( storeObject == undefined || typeof storeObject != 'object' ) {
+			return console.warn( '[MivaLayout] - "storeObject" is not an object' );
 		}
 
-		let state = {};
+		let store = {};
 
-		for ( let componentId in this.state ) {
+		for ( let componentId in this.store ) {
 
-			let activeComponentState = this.state[ componentId ];
-			let passedComponentState = stateObject[ componentId ];
+			let activeComponentState = this.store[ componentId ];
+			let passedComponentState = storeObject[ componentId ];
 
 			if ( passedComponentState && activeComponentState && activeComponentState.__attributes__ !== passedComponentState.__attributes__ ) {
 
-				state[ componentId ] = Object.assign(
+				store[ componentId ] = Object.assign(
 					{},
 					passedComponentState,
 					activeComponentState
@@ -79,7 +79,7 @@ export default class MivaLayout {
 
 			}
 
-			state[ componentId ] = Object.assign(
+			store[ componentId ] = Object.assign(
 				{},
 				activeComponentState,
 				passedComponentState
@@ -87,7 +87,7 @@ export default class MivaLayout {
 
 		}
 
-		this.state = _cloneDeep( state );
+		this.store = _cloneDeep( store );
 
 		return this;
 
@@ -95,17 +95,17 @@ export default class MivaLayout {
 
 	getComponentState( componentId ) {
 
-		return this.state[ componentId ];
+		return this.store[ componentId ];
 
 	}
 
 	setComponentState( componentId, componentState ) {
 
-		return this.state[ componentId ] = componentState;
+		return this.store[ componentId ] = componentState;
 
 	}
 
-	syncState( components ) {
+	syncComponentStates( components ) {
 
 		if ( !Array.isArray( components ) && !(components instanceof MivaLayoutComponentTree) ) {
 			throw new TypeError( '[MivaLayout] - "components" is not an array or instance of "MivaLayoutComponentTree"'  );
@@ -115,7 +115,7 @@ export default class MivaLayout {
 			throw new Error( '[MivaLayout] - "components" does not have sufficient length' );
 		}
 
-		var keyState = this.getComponentState( components[ 0 ].id );
+		var keyState = this.getComponentState( components.first().id );
 
 		for ( let component of components ) {
 			
@@ -127,9 +127,9 @@ export default class MivaLayout {
 
 	}
 
-	exportState( pretty ) {
+	exportStore( pretty ) {
 
-		return JSON.stringify( this.state, null, ( pretty ) ? '\t' : '' );
+		return JSON.stringify( this.store, null, ( pretty ) ? '\t' : '' );
 
 	}
 
@@ -151,7 +151,7 @@ export default class MivaLayout {
 	}
 
 
-	_createDefaultState( defaultComponentStateDataFactory ) {
+	_createStore( defaultComponentStateDataFactory ) {
 
 		return this.$components.reduce(( defaultStateAccumulator, component ) => {
 
@@ -167,28 +167,28 @@ export default class MivaLayout {
 
 	}
 
-	_findConfigComponent( componentTree ) {
+	_findSettingsComponent( componentTree ) {
 
 		if ( !(componentTree instanceof MivaLayoutComponentTree) ) {
 			throw new TypeError( '[MivaLayout] - "componentTree" is not a MivaLayoutComponentTree instance' );
 		}
 
-		let configComponent = componentTree.groupByType( this.options.configComponentCode );
+		let settingsComponent = componentTree.groupByType( this.options.settingsComponentCode ).first();
 
-		if ( configComponent != undefined ) {
+		if ( settingsComponent != undefined ) {
 
-			if ( this.options.pullConfigComponent ) {
+			if ( this.options.pullSettingsComponent ) {
 
-				_pull( componentTree, configComponent[ 0 ] );
+				_pull( componentTree, settingsComponent );
 
 			}
 
-			return ( this.options.exposeFullConfigComponent ) ? configComponent[ 0 ] : configComponent[ 0 ].attributes;
+			return ( this.options.exposeFullSettingsComponent ) ? settingsComponent : { ...settingsComponent.attributes, $componentId: settingsComponent.id };
 
 		}
 
 		if ( !this.options.suppressWarnings ) {
-			console.warn( `[MivaLayout] - unable to find configuration component "${ this.options.configComponentCode }"` );
+			console.warn( `[MivaLayout] - unable to find "settings" component "${ this.options.settingsComponentCode }"` );
 		}
 
 		return {};
@@ -208,3 +208,13 @@ export default class MivaLayout {
 	}
 
 };
+
+/* ================================ Static Properties ================================ */
+
+MivaLayout.Component = MivaLayoutComponent;
+
+MivaLayout.ComponentTree = MivaLayoutComponentTree;
+
+/* ================================ Export ================================ */
+
+export default MivaLayout;

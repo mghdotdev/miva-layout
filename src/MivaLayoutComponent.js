@@ -3,7 +3,7 @@ import _camelCase from 'lodash/camelcase';
 
 export default class MivaLayoutComponent {
 
-	constructor( component ) {
+	constructor( component, orignalIndex, $layout ) {
 
 		// validate component object type
 		if ( typeof component != 'object' ) {
@@ -22,18 +22,65 @@ export default class MivaLayoutComponent {
 		this.type = component.component.code;
 		this.typeName = component.component.name;
 		this.childrenCount = ( component.children_count == undefined ) ? 0 : component.children_count;
+		this.index = orignalIndex;
 
 		// special attributes structure
 		this.attributes = this._createAttributes( component.attributes );
 
 		// special children structure
-		this.children = new MivaLayoutComponentTree( component.children );
+		this.children = new MivaLayoutComponentTree( component.children, $layout );
+
+		// copy unmodified component object into private property
+		Object.defineProperty( this, '$component', {
+			get: function() {
+				return component;
+			}
+		});
+
+		// define special "property" (function) to reference the layout instance 
+		Object.defineProperty( this, '$layout', {
+			get: function() {
+				return $layout;
+			} 
+		});
+
+	}
+
+	/* ================================ Public Getter Properties ================================ */
+	get currentIndex() {
+
+		return this.siblings().findIndex(( component ) => {
+
+			return ( component.id == this.id );
+
+		});
 
 	}
 
 	/* ================================ Public Methods ================================ */
+	parent() {
 
-	
+		return this.$layout.components.findById( this.parentId );
+
+	}
+
+	siblings() {
+
+		return this.$layout.components.groupByParentId( this.parentId );
+
+	}
+
+	next() {
+
+		return this.siblings().index( this.currentIndex + 1 );
+
+	}
+
+	previous() {
+
+		return this.siblings().index( this.currentIndex - 1 );
+
+	}
 
 	/* ================================ Private Methods ================================ */
 

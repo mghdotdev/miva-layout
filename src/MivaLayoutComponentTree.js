@@ -2,15 +2,23 @@ import MivaLayoutComponent from './MivaLayoutComponent';
 
 export default class MivaLayoutComponentTree extends Array {
 
-	constructor( components ) {
+	constructor( components, $layout ) {
 
 		let list = [];
 
 		if ( Array.isArray( components ) ) {
 
-			list = components.reduce(( components, component ) => {
+			list = components.reduce(( components, component, currentIndex ) => {
 
-				return components.concat( new MivaLayoutComponent( component ) );
+				return components.concat(
+					( component instanceof MivaLayoutComponent ) ?
+						component :
+						new MivaLayoutComponent(
+							component,
+							currentIndex,
+							$layout
+						)
+				);
 
 			}, []);
 
@@ -23,6 +31,36 @@ export default class MivaLayoutComponentTree extends Array {
 	}
 
 	/* ================================ Public Methods ================================ */
+
+	first() {
+
+		return this[ 0 ];
+
+	}
+
+	last() {
+
+		return this[ this.length - 1 ];
+
+	}
+
+	index( index ) {
+
+		return this[ index ];
+
+	}
+
+	recurse( callback, listProperty = 'children' ) {
+
+		return this.map(function( component ) {
+
+			let result = callback( component );
+
+			return { result, ...component[ listProperty ].recurse( callback ) };
+
+		});
+
+	}
 
 	findById( id, deep ) {
 
@@ -37,13 +75,23 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	findByComponentId( componentId, deep ) {
+	groupByComponentId( componentId, deep ) {
 
 		if ( typeof componentId != 'number' ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "componentId" is not a number' );
 		}
 
 		return this._groupBy( 'componentId', componentId, deep );
+		
+	}
+
+	groupByParentId( parentId, deep ) {
+
+		if ( typeof parentId != 'number' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "parentId" is not a number' );
+		}
+
+		return this._groupBy( 'parentId', parentId, deep );
 		
 	}
 
@@ -97,7 +145,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	groupByParent( component, groupKey, groupVal ) {
+	/*groupByParent( component, groupKey, groupVal ) {
 
 		if ( !component instanceof MivaLayoutComponent ) {
 			throw new TypeError( '[MivaLayoutComponentTree] - "component" is not an instance of "MivaLayoutComponent"' );
@@ -122,7 +170,7 @@ export default class MivaLayoutComponentTree extends Array {
 
 		}
 
-		return group;
+		return new MivaLayoutComponentTree( group );
 
 	}
 
@@ -151,9 +199,9 @@ export default class MivaLayoutComponentTree extends Array {
 
 		}
 
-		return group;
+		return new MivaLayoutComponentTree( group );
 
-	}
+	}*/
 
 	/* ================================ Private Methods ================================ */
 
@@ -242,9 +290,9 @@ export default class MivaLayoutComponentTree extends Array {
 			throw new TypeError( '[MivaLayoutComponentTree] - "groupVal" is undefined' );
 		}
 
-		let result = this._groupByRecursion( groupKey, groupVal, this, deep );
+		let group = this._groupByRecursion( groupKey, groupVal, this, deep );
 
-		return ( result.length > 0 ) ? result : undefined;
+		return new MivaLayoutComponentTree( group );
 
 	}
 
