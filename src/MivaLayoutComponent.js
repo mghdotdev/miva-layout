@@ -3,7 +3,7 @@ import _camelCase from 'lodash/camelcase';
 
 export default class MivaLayoutComponent {
 
-	constructor( component, orignalIndex, $layout ) {
+	constructor( component, orignalIndex, $instanceId ) {
 
 		// validate component object type
 		if ( typeof component != 'object' ) {
@@ -23,12 +23,13 @@ export default class MivaLayoutComponent {
 		this.typeName = component.component.name;
 		this.childrenCount = ( component.children_count == undefined ) ? 0 : component.children_count;
 		this.index = orignalIndex;
+		this.$instanceId = $instanceId;
 
 		// special attributes structure
 		this.attributes = this._createAttributes( component.attributes );
 
 		// special children structure
-		this.children = new MivaLayoutComponentTree( component.children, $layout );
+		this.children = new MivaLayoutComponentTree( component.children, $instanceId );
 
 		// copy unmodified component object into private property
 		Object.defineProperty( this, '$component', {
@@ -40,13 +41,13 @@ export default class MivaLayoutComponent {
 		// define special "property" (function) to reference the layout instance 
 		Object.defineProperty( this, '$layout', {
 			get: function() {
-				return $layout;
+				return MivaLayout.$instanceCache[ this.$instanceId ];
 			} 
 		});
 
 	}
 
-	/* ================================ Public Getter Properties ================================ */
+	/* ================================ Public Getters ================================ */
 	get currentIndex() {
 
 		return this.siblings().findIndex(( component ) => {
@@ -58,6 +59,7 @@ export default class MivaLayoutComponent {
 	}
 
 	/* ================================ Public Methods ================================ */
+
 	parent() {
 
 		return this.$layout.components.findById( this.parentId );
@@ -79,6 +81,24 @@ export default class MivaLayoutComponent {
 	previous() {
 
 		return this.siblings().index( this.currentIndex - 1 );
+
+	}
+
+	isFirst() {
+
+		return ( this.siblings().first() === this );
+
+	}
+
+	isLast() {
+
+		return ( this.siblings().last() === this );
+
+	}
+
+	state() {
+
+		return this.$layout.getComponentState( this.id );
 
 	}
 

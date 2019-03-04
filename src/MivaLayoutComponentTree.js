@@ -2,7 +2,7 @@ import MivaLayoutComponent from './MivaLayoutComponent';
 
 export default class MivaLayoutComponentTree extends Array {
 
-	constructor( components, $layout ) {
+	constructor( components, $instanceId ) {
 
 		let list = [];
 
@@ -16,7 +16,7 @@ export default class MivaLayoutComponentTree extends Array {
 						new MivaLayoutComponent(
 							component,
 							currentIndex,
-							$layout
+							$instanceId
 						)
 				);
 
@@ -32,6 +32,17 @@ export default class MivaLayoutComponentTree extends Array {
 
 	/* ================================ Public Methods ================================ */
 
+	moveComponent( fromIndex, toIndex ) {
+		this.splice( toIndex, 0, this.splice( fromIndex, 1 )[0] );
+		return this;
+	}
+
+	index( index ) {
+
+		return this[ index ];
+
+	}
+
 	first() {
 
 		return this[ 0 ];
@@ -41,12 +52,6 @@ export default class MivaLayoutComponentTree extends Array {
 	last() {
 
 		return this[ this.length - 1 ];
-
-	}
-
-	index( index ) {
-
-		return this[ index ];
 
 	}
 
@@ -125,16 +130,6 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
-	groupByAttribute( key, value, deep ) {
-
-		if ( typeof name != 'number' && typeof name != 'string' ) {
-			throw new TypeError( '[MivaLayoutComponentTree] - "key" is not a number or string' );
-		}
-
-		return this._groupByAttributeRecursion( key, value, this, deep );
-
-	}
-
 	findByAttribute( key, value, deep ) {
 
 		if ( typeof name != 'number' && typeof name != 'string' ) {
@@ -142,6 +137,16 @@ export default class MivaLayoutComponentTree extends Array {
 		}
 
 		return this._findByAttributeRecursion( key, value, this, deep );
+
+	}
+
+	groupByAttribute( key, value, deep ) {
+
+		if ( typeof name != 'number' && typeof name != 'string' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "key" is not a number or string' );
+		}
+
+		return this._groupByAttributeRecursion( key, value, this, deep );
 
 	}
 

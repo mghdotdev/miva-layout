@@ -2,6 +2,7 @@ import MivaLayoutComponentTree from './MivaLayoutComponentTree';
 import MivaLayoutComponent from './MivaLayoutComponent';
 import _cloneDeep from 'lodash/clonedeep';
 import _pull from 'lodash/pull';
+import _uniqueId from 'lodash/uniqueid';
 import objectHash from 'object-hash';
 
 const defaultOptions = {
@@ -26,8 +27,14 @@ const MivaLayout = class MivaLayout {
 		// assign layout argument to private property
 		this.$layout = _cloneDeep( layout );
 
+		// create an instance id
+		this.$instanceId = _uniqueId( 'ml-' );
+
+		// copy into the $instanceCache
+		MivaLayout.$instanceCache[ this.$instanceId ] = this;
+
 		// create finalized components structure
-		this.components = new MivaLayoutComponentTree( layout, this );
+		this.components = new MivaLayoutComponentTree( layout, this.$instanceId );
 
 		// create flat version
 		this.$components = this._createFlatComponentsList( this.components );
@@ -95,7 +102,7 @@ const MivaLayout = class MivaLayout {
 
 	getComponentState( componentId ) {
 
-		return this.store[ componentId ];
+		return this.store && this.store[ componentId ];
 
 	}
 
@@ -214,6 +221,16 @@ const MivaLayout = class MivaLayout {
 MivaLayout.Component = MivaLayoutComponent;
 
 MivaLayout.ComponentTree = MivaLayoutComponentTree;
+
+MivaLayout.$instanceCache = [];
+
+/* ================================ Static Methods ================================ */
+
+MivaLayout.getInstance = function( instanceId ) {
+
+	return MivaLayout.$instanceCache[ instanceId ];
+
+};
 
 /* ================================ Export ================================ */
 
