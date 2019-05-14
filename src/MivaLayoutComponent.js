@@ -13,6 +13,7 @@ export default class MivaLayoutComponent {
 		// Standard properties
 		this.active = component.active;
 		this.id = component.id;
+		this.code = component.code;
 		this.componentId = component.component_id;
 		this.componentImage = component.component.image;
 		this.componentDescription = component.component.descrip;
@@ -98,7 +99,7 @@ export default class MivaLayoutComponent {
 
 	state() {
 
-		return this.$layout.getComponentState( this.id );
+		return this.$layout.getComponentState( this[ this.$layout.options.componentIdentifier ] );
 
 	}
 

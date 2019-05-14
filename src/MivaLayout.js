@@ -9,7 +9,8 @@ const defaultOptions = {
 	settingsComponentCode: 'settings',
 	exposeFullSettingsComponent: false,
 	pullSettingsComponent: true,
-	suppressWarnings: false
+	suppressWarnings: false,
+	componentIdentifier: 'code'
 };
 
 const MivaLayout = class MivaLayout {
@@ -61,7 +62,7 @@ const MivaLayout = class MivaLayout {
 
 	}
 
-	mergeStore( storeObject ) {
+	mergeStore( storeObject, componentIdentifierMap ) {
 
 		if ( storeObject == undefined || typeof storeObject != 'object' ) {
 			return console.warn( '[MivaLayout] - "storeObject" is not an object' );
@@ -69,14 +70,37 @@ const MivaLayout = class MivaLayout {
 
 		let store = {};
 
-		for ( let componentId in this.store ) {
+		for ( let componentIdentifier in this.store ) {
 
-			let activeComponentState = this.store[ componentId ];
-			let passedComponentState = storeObject[ componentId ];
+			let activeComponentState = this.store[ componentIdentifier ];
+			let passedComponentState = storeObject[ componentIdentifier ];
+
+			// find within map if exists and passed state is undefined
+			if ( componentIdentifierMap != undefined && passedComponentState == undefined ) {
+
+				let foundComponentIdentiferMap = componentIdentifierMap[ componentIdentifier ];
+
+				if ( foundComponentIdentiferMap != undefined ) {
+
+					if ( !Array.isArray( foundComponentIdentiferMap ) ) {
+						throw new TypeError( '[MivaLayout] - Match found for "componentIdentifierMap" is not an array' );
+					}
+
+					let foundComponentState = foundComponentIdentiferMap.find(function( oldComponentIdentifer ) {
+						return Object.keys( storeObject ).find(function( storeObjectKey ) {
+							return ( storeObjectKey == oldComponentIdentifer );
+						});
+					});
+
+					passedComponentState = storeObject[ foundComponentState ];
+
+				}
+
+			}
 
 			if ( passedComponentState && activeComponentState && activeComponentState.__attributes__ !== passedComponentState.__attributes__ ) {
 
-				store[ componentId ] = Object.assign(
+				store[ componentIdentifier ] = Object.assign(
 					{},
 					passedComponentState,
 					activeComponentState
@@ -86,7 +110,7 @@ const MivaLayout = class MivaLayout {
 
 			}
 
-			store[ componentId ] = Object.assign(
+			store[ componentIdentifier ] = Object.assign(
 				{},
 				activeComponentState,
 				passedComponentState
@@ -100,33 +124,33 @@ const MivaLayout = class MivaLayout {
 
 	}
 
-	getComponentState( componentId ) {
+	getComponentState( componentIdentifier ) {
 
-		return this.store && this.store[ componentId ];
+		return this.store && this.store[ componentIdentifier ];
 
 	}
 
-	setComponentState( componentId, componentState ) {
+	setComponentState( componentIdentifier, componentState ) {
 
-		return this.store[ componentId ] = componentState;
+		return this.store[ componentIdentifier ] = componentState;
 
 	}
 
 	syncComponentStates( components ) {
 
 		if ( !Array.isArray( components ) && !(components instanceof MivaLayoutComponentTree) ) {
-			throw new TypeError( '[MivaLayout] - "components" is not an array or instance of "MivaLayoutComponentTree"'  );
+			throw new TypeError( '[MivaLayout] - "components" is not an array or instance of "MivaLayoutComponentTree"' );
 		}
 
 		if ( components.length == 0 ) {
 			throw new Error( '[MivaLayout] - "components" does not have sufficient length' );
 		}
 
-		var keyState = this.getComponentState( components.first().id );
+		var keyState = this.getComponentState( components.first()[ this.options.componentIdentifier ] );
 
 		for ( let component of components ) {
 			
-			this.setComponentState( component.id, keyState );
+			this.setComponentState( component[ this.options.componentIdentifier ], keyState );
 
 		}
 
@@ -164,9 +188,10 @@ const MivaLayout = class MivaLayout {
 
 			return {
 				...defaultStateAccumulator,
-				[ component.id ]: {
+				[ component[ this.options.componentIdentifier ] ]: {
 					...defaultComponentStateDataFactory( component ),
-					__attributes__: objectHash( component.attributes )
+					__attributes__: objectHash( component.attributes ),
+					__id__: component.id
 				}
 			};
 
@@ -190,7 +215,7 @@ const MivaLayout = class MivaLayout {
 
 			}
 
-			return ( this.options.exposeFullSettingsComponent ) ? settingsComponent : { ...settingsComponent.attributes, $componentId: settingsComponent.id };
+			return ( this.options.exposeFullSettingsComponent ) ? settingsComponent : { ...settingsComponent.attributes, $componentIdentifier: settingsComponent[ this.options.componentIdentifier ] };
 
 		}
 

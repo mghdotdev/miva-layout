@@ -80,6 +80,16 @@ export default class MivaLayoutComponentTree extends Array {
 
 	}
 
+	findByCode( code, deep ) {
+
+		if ( typeof code != 'string' ) {
+			throw new TypeError( '[MivaLayoutComponentTree] - "code" is not a string' );
+		}
+
+		return this._findBy( 'code', code, deep );
+
+	}
+
 	groupByComponentId( componentId, deep ) {
 
 		if ( typeof componentId != 'number' ) {
