@@ -190,8 +190,7 @@ const MivaLayout = class MivaLayout {
 				...defaultStateAccumulator,
 				[ component[ this.options.componentIdentifier ] ]: {
 					...defaultComponentStateDataFactory( component ),
-					__attributes__: objectHash( component.attributes ),
-					__id__: component.id
+					__attributes__: objectHash( component.attributes )
 				}
 			};
 
