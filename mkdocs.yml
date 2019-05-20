@@ -10,7 +10,6 @@ nav:
     - Overview: MivaLayout/index.md
     - Properties: MivaLayout/properties.md
     - Methods: MivaLayout/methods.md
-    - State Object: MivaLayout/StateObject.md
   - MivaLayoutComponentTree:
     - Overview: MivaLayoutComponentTree/index.md
   - MivaLayoutComponent:

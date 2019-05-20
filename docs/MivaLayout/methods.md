@@ -1,14 +1,14 @@
 # [Classes](/) → [MivaLayout](/MivaLayout) → Methods
 
-## `createState( defaultComponentStateData );`
+## `createStore( defaultComponentStateData );`
 
-Create a MivaLayout [State Object](/MivaLayout/StateObject/). A [State Object](/MivaLayout/StateObject/) is a dictionary style object that uses each individual component's ID as a key. It allows the developer to store relevant data in a global location. This simplifies state management when working with a front-end framework like Angular, Vue or React.
+Create a MivaLayout Store Object. A Store Object is a dictionary style object that uses each individual component's current `componentIdentifer` setting as a key. It allows the developer to store relevant data in a global location. This simplifies state management when working with a front-end framework like Angular, Vue or React.
 
 ### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| defaultComponentStateData | <span class="type-hint-function">Function</span><span class="type-hint-object">Object</span> | Accepts either an object or a function. The value returned from the function will be used as the `defaultState` within the layout for each Component Data Object within the State Object. |
+| defaultComponentStateData | <span class="type-hint-function">Function</span><span class="type-hint-object">Object</span> | Accepts either an object or a function. The value returned from the function will be used as the `defaultState` within the layout for each Component Data Object within the Store Object. |
 
 !!! Note "Developer Note"
     When using an object literal all components will __NOT__ share the same reference to the object. The object literal will be cloned before assigning to each component slot. If you would like to share state between components, use the [syncState](#syncstate-components) function.
@@ -22,8 +22,8 @@ Create a MivaLayout [State Object](/MivaLayout/StateObject/). A [State Object](/
 ```js tab="as Function"
 var layout = new MivaLayout( json );
 
-// creating state with a function
-layout.createState(function( component ) {
+// creating the store with a function
+layout.createStore(function( component ) {
     
     // reference to each "component" within the layout
 
@@ -51,8 +51,8 @@ layout.createState(function( component ) {
 ```js tab="as Object"
 var layout = new MivaLayout( json );
 
-// creating state with a basic object
-layout.createState( { key: 'value' } );
+// creating store with a basic object
+layout.createStore( { key: 'value' } );
 
 // - output
 {
@@ -65,15 +65,15 @@ layout.createState( { key: 'value' } );
 
 ---
 
-## `mergeState( stateObject );`
+## `mergeStore( storeObject, componentIdentifierMap );`
 
-Attempts to merge the current state with the passed parameter. The attributes hash stored in the `:::js __attributes__` property on a [State Object](/MivaLayout/StateObject/) is checked to determine if a Component's attributes have changed from the server. This function is useful when storing the [State Object](/MivaLayout/StateObject/) in `:::js sessionStorage`, `:::js localStorage` or a similar method.
+Attempts to merge the current store with the passed parameter. The attributes hash stored in the `:::js __attributes__` property on a Store Object is checked to determine if a Component's attributes have changed from the server. This function is useful when storing the Store Object in `:::js sessionStorage`, `:::js localStorage` or a similar method.
 
 ### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| stateObject | <span class="type-hint-object">Object</span> | The State Object to be merged. |
+| storeObject | <span class="type-hint-object">Object</span> | The Store Object to be merged. |
 
 ### Returns
 
@@ -81,15 +81,15 @@ Attempts to merge the current state with the passed parameter. The attributes ha
 
 ---
 
-## `getComponentState( componentId );`
+## `getComponentState( componentIdentifer );`
 
-Retreive a specific Component's state data from the [State Object](/MivaLayout/StateObject/) by ID.
+Retreive a specific Component's state data from the Store Object by the current `componentIdentifer` setting.
 
 ### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| componentId | <span class="type-hint-number">Number</span> | A number representing a component's ID present within the State Object. |
+| componentIdentifer | <span class="type-hint-object">Mixed</span> | An ID / code (componentIdentifier) present within the Store Object. |
 
 ### Returns
 
@@ -97,15 +97,15 @@ Retreive a specific Component's state data from the [State Object](/MivaLayout/S
 
 ---
 
-## `setComponentState( componentId, componentState );`
+## `setComponentState( componentIdentifer, componentState );`
 
-Overwrite a specific component's state data object by ID.
+Overwrite a specific component's state data object by the current `componentIdentifer` setting.
 
 ### Parameters
 
 | Param | Type | Details |
 | --- | --- | --- |
-| componentId | <span class="type-hint-number">Number</span> | A number representing a component's ID present within the State Object. |
+| componentIdentifer | <span class="type-hint-object">Mixed</span> | An ID / code (componentIdentifier) present within the Store Object. |
 | componentState | <span class="type-hint-object">Object</span> | A component state data object. Must contain a hash of the component's attributes object at the `:::js __attributes__` key. |
 
 ### Returns
@@ -114,7 +114,7 @@ Overwrite a specific component's state data object by ID.
 
 ---
 
-## `syncState( components );`
+## `syncComponentStates( components );`
 
 Overwrites the passed array of `MivaLayoutComponent` instances current Component State Data with the first component within the array. The objects will be linked by reference and changes made to one will update all.
 
@@ -130,9 +130,9 @@ Overwrites the passed array of `MivaLayoutComponent` instances current Component
 
 ---
 
-## `exportState( [ pretty ] );`
+## `exportStore( [ pretty ] );`
 
-Returns a JSON string of the current State Object. Use the optional `pretty` parameter to format the JSON string. 
+Returns a JSON string of the current Store Object. Use the optional `pretty` parameter to format the JSON string. 
 
 ### Parameters
 
@@ -142,6 +142,20 @@ Returns a JSON string of the current State Object. Use the optional `pretty` par
 
 ### Returns
 
-<span class="type-hint-string">String</span> &emsp;&mdash;&emsp; Stringified JSON State Object.
+<span class="type-hint-string">String</span> &emsp;&mdash;&emsp; Stringified JSON Store Object.
+
+---
+
+## Static Methods
+
+Functions/Methods that will be accessable directly from the `MivaLayout` global (not an instance property). Like `new MivaLayout.Component( ... )`.
+
+### `Component`
+
+A global reference to the [MivaLayoutComponent](/MivaLayoutComponent) class.
+
+### `ComponentTree`
+
+A global reference to the [MivaLayoutComponentTree](/MivaLayoutComponentTree) class.
 
 ---

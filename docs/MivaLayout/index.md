@@ -21,35 +21,29 @@ var layout = new MivaLayout( jsonObject [, options ] );
 
 | Key | Default | Details |
 | --- | --- | --- |
-| configComponentCode | `:::js 'config'` | A string representing what `type` of component to search for within the Layout for use in the "config" slot. |
-| exposeFullConfigComponent | `:::js false` | Whether or not to expose the full "config" component or only the attribute tree. Defaults to only exposing the attribute tree. |
-| pullConfigComponent | `:::js true` | Whether or not to remove the "config" component when found within the Layout. Defaults to `:::js true`. |
+| settingsComponentCode | `:::js 'settings'` | A string representing what `type` of component to search for within the Layout for use in the "settings" slot. |
+| exposeFullSettingsComponent | `:::js false` | Whether or not to expose the full "settings" component or only the attribute tree. Defaults to only exposing the attribute tree. |
+| pullSettingsComponent | `:::js true` | Whether or not to remove the "settings" component when found within the Layout. Defaults to `:::js true`. |
 | suppressWarnings | `:::js false` | Suppresses all warnings outputted to the console. Defaults to `:::js false`.  |
+| componentIdentifier |  `:::js 'code'` | The default property to access when attempting to load a component's state. |
 
 ---
 
 ## Features
 
-### The "Config" Component
+### The "Settings" Component
 
-The "config" feature allows a developer to create a "top-level" component to store configuration or global layout data within the Layout. The "config" component by default will be pulled from the `MivaLayoutComponentTree` it is housed in. The "config" component can be any level deep within the Layout tree and only the first occurrence will be pulled and slotted into the `config` property.
+The "settings" feature allows a developer to create a "top-level" component to store configuration or global layout data within the Layout. The "settings" component by default will be pulled from the `MivaLayoutComponentTree` it is housed in. The "settings" component can be any level deep within the Layout tree and only the first occurrence will be pulled and slotted into the `settings` property on the `MivaLayout` instance.
 
-### State Management
+### Store/State Management
 
-State management is a core feature of `miva-layout.js`. When creating an application with a Components & Layouts back-end you will often require data to be associated with certain components when in application runtime. The following methods are used to create, manipulate and retrieve the "State Object" and "Component State Data" objects from the property `state` stored within the `MivaLayout` instance.
+State management is a core feature of `miva-layout.js`. When creating an application with a Components & Layouts back-end you will often require data to be associated with certain components when in application runtime. The following methods are used to create, manipulate and retrieve the "State Object" and "Component State Data" objects from the property `store` stored within the `MivaLayout` instance.
 
-* [createState](/MivaLayout/methods/#createstate-defaultcomponentstatedata)
-* [mergeState](/MivaLayout/methods/#mergestate-stateobject)
+* [createStore](/MivaLayout/methods/#createstore-defaultcomponentstatedata)
+* [mergeStore](/MivaLayout/methods/#mergestore-stateobject)
 * [getComponentState](/MivaLayout/methods/#getcomponentstate-componentid)
 * [setComponentState](/MivaLayout/methods/#getcomponentstate-componentid)
-* [syncState](/MivaLayout/methods/#syncstate-components)
-* [exportState](/MivaLayout/methods/#exportstate-pretty)
+* [syncComponentStates](/MivaLayout/methods/#synccomponentstates-components)
+* [exportStore](/MivaLayout/methods/#exportstore-pretty)
 
 ---
-
-## Examples
-
-### Creating & Merging State
-
-<p data-height="265" data-theme-id="dark" data-slug-hash="WLzjqJ" data-default-tab="html,result" data-user="mghweb" data-pen-title="Create & Merge State" class="codepen">See the Pen <a href="https://codepen.io/mghweb/pen/WLzjqJ/">Create & Merge State</a> by Max Hegler (<a href="https://codepen.io/mghweb">@mghweb</a>) on <a href="https://codepen.io">CodePen</a>.</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

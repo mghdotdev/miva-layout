@@ -7,7 +7,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, quam, qui
 ## Usage
 
 ```js
-
+var components = new MivaLayout.ComponentTree( components [, $instanceId ] );
 ```
 
 ### Arguments

@@ -242,6 +242,8 @@ const MivaLayout = class MivaLayout {
 
 /* ================================ Static Properties ================================ */
 
+MivaLayout.help = 'For more information, documentation and examples visit "http://mghweb.github.io/miva-layout".';
+
 MivaLayout.Component = MivaLayoutComponent;
 
 MivaLayout.ComponentTree = MivaLayoutComponentTree;
