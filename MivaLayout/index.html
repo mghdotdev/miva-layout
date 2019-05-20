@@ -396,9 +396,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#examples" title="Examples" class="md-nav__link">
-    Examples
+  <a href="#features" title="Features" class="md-nav__link">
+    Features
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-settings-component" title="The "Settings" Component" class="md-nav__link">
+    The "Settings" Component
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storestate-management" title="Store/State Management" class="md-nav__link">
+    Store/State Management
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -433,18 +453,6 @@
   <li class="md-nav__item">
     <a href="methods/" title="Methods" class="md-nav__link">
       Methods
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="StateObject/" title="State Object" class="md-nav__link">
-      State Object
     </a>
   </li>
 
@@ -574,9 +582,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#examples" title="Examples" class="md-nav__link">
-    Examples
+  <a href="#features" title="Features" class="md-nav__link">
+    Features
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-settings-component" title="The "Settings" Component" class="md-nav__link">
+    The "Settings" Component
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storestate-management" title="Store/State Management" class="md-nav__link">
+    Store/State Management
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -601,7 +629,7 @@
                 
                 <h1 id="classes-mivalayout"><a href="/">Classes</a> → MivaLayout<a class="headerlink" href="#classes-mivalayout" title="Permanent link">#</a></h1>
 <hr />
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, quam, quia! Doloribus nisi praesentium placeat dolores repudiandae pariatur, aspernatur facere autem! Maxime, iure eaque! Laboriosam quasi, harum quod facilis qui.</p>
+<p>Main entry point for <code class="codehilite">miva-layout.js</code>. Optimizes the raw JSON output from the <a href="https://github.com/tessguefen/Components-Layouts">Components &amp; Layouts</a> module. The layout JSON is converted into a <a href="/MivaLayoutComponentTree">MivaLayoutComponentTree</a> instance which is an array of <a href="/MivaLayoutComponentTree">MivaLayoutComponent</a> instances. This class is also responsible for optimizing state management when using the Components &amp; Layouts module with a front-end framework like Angular, Vue or React.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
 <div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MivaLayout</span><span class="p">(</span> <span class="nx">jsonObject</span> <span class="p">[,</span> <span class="nx">options</span> <span class="p">]</span> <span class="p">);</span>
 </pre></div>
@@ -639,29 +667,47 @@
 </thead>
 <tbody>
 <tr>
-<td>configComponentCode</td>
-<td><code class="codehilite"><span class="s1">&#39;config&#39;</span></code></td>
-<td>A string representing what <code class="codehilite">type</code> of component to search for within the Layout for use in the Config slot.</td>
+<td>settingsComponentCode</td>
+<td><code class="codehilite"><span class="s1">&#39;settings&#39;</span></code></td>
+<td>A string representing what <code class="codehilite">type</code> of component to search for within the Layout for use in the "settings" slot.</td>
 </tr>
 <tr>
-<td>exposeFullConfigComponent</td>
+<td>exposeFullSettingsComponent</td>
 <td><code class="codehilite"><span class="kc">false</span></code></td>
-<td>Whether or not to expose the full Config component or only the attribute tree. Defaults to only exposing the attribute tree.</td>
+<td>Whether or not to expose the full "settings" component or only the attribute tree. Defaults to only exposing the attribute tree.</td>
 </tr>
 <tr>
-<td>pullConfigComponent</td>
+<td>pullSettingsComponent</td>
 <td><code class="codehilite"><span class="kc">true</span></code></td>
-<td>Whether or not to remove the Config component when found within the Layout. Defaults to <code class="codehilite"><span class="kc">true</span></code>.</td>
+<td>Whether or not to remove the "settings" component when found within the Layout. Defaults to <code class="codehilite"><span class="kc">true</span></code>.</td>
 </tr>
 <tr>
 <td>suppressWarnings</td>
 <td><code class="codehilite"><span class="kc">false</span></code></td>
 <td>Suppresses all warnings outputted to the console. Defaults to <code class="codehilite"><span class="kc">false</span></code>.</td>
 </tr>
+<tr>
+<td>componentIdentifier</td>
+<td><code class="codehilite"><span class="s1">&#39;code&#39;</span></code></td>
+<td>The default property to access when attempting to load a component's state.</td>
+</tr>
 </tbody>
 </table>
 <hr />
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h2>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">#</a></h2>
+<h3 id="the-settings-component">The "Settings" Component<a class="headerlink" href="#the-settings-component" title="Permanent link">#</a></h3>
+<p>The "settings" feature allows a developer to create a "top-level" component to store configuration or global layout data within the Layout. The "settings" component by default will be pulled from the <code class="codehilite">MivaLayoutComponentTree</code> it is housed in. The "settings" component can be any level deep within the Layout tree and only the first occurrence will be pulled and slotted into the <code class="codehilite">settings</code> property on the <code class="codehilite">MivaLayout</code> instance.</p>
+<h3 id="storestate-management">Store/State Management<a class="headerlink" href="#storestate-management" title="Permanent link">#</a></h3>
+<p>State management is a core feature of <code class="codehilite">miva-layout.js</code>. When creating an application with a Components &amp; Layouts back-end you will often require data to be associated with certain components when in application runtime. The following methods are used to create, manipulate and retrieve the "State Object" and "Component State Data" objects from the property <code class="codehilite">store</code> stored within the <code class="codehilite">MivaLayout</code> instance.</p>
+<ul>
+<li><a href="/MivaLayout/methods/#createstore-defaultcomponentstatedata">createStore</a></li>
+<li><a href="/MivaLayout/methods/#mergestore-stateobject">mergeStore</a></li>
+<li><a href="/MivaLayout/methods/#getcomponentstate-componentid">getComponentState</a></li>
+<li><a href="/MivaLayout/methods/#getcomponentstate-componentid">setComponentState</a></li>
+<li><a href="/MivaLayout/methods/#synccomponentstates-components">syncComponentStates</a></li>
+<li><a href="/MivaLayout/methods/#exportstore-pretty">exportStore</a></li>
+</ul>
+<hr />
                 
                   
                 
