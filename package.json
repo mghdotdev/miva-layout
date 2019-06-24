@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "demo": "webpack-dev-server"
+    "dev": "webpack-dev-server"
   },
   "keywords": [
     "miva",
