@@ -204,7 +204,7 @@ const MivaLayout = class MivaLayout {
 			throw new TypeError( '[MivaLayout] - "componentTree" is not a MivaLayoutComponentTree instance' );
 		}
 
-		let settingsComponent = componentTree.groupByType( this.options.settingsComponentCode ).first();
+		let settingsComponent = componentTree.findByCode( this.options.settingsComponentCode );
 
 		if ( settingsComponent != undefined ) {
 

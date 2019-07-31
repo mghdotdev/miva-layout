@@ -43,7 +43,7 @@ export default class MivaLayoutComponent {
 		Object.defineProperty( this, '$layout', {
 			get: function() {
 				return MivaLayout.$instanceCache[ this.$instanceId ];
-			} 
+			}
 		});
 
 	}
