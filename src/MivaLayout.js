@@ -6,7 +6,7 @@ import _uniqueId from 'lodash/uniqueid';
 import objectHash from 'object-hash';
 
 const defaultOptions = {
-	settingsComponentCode: 'settings',
+	settingsComponentType: 'settings',
 	exposeFullSettingsComponent: false,
 	pullSettingsComponent: true,
 	suppressWarnings: false,
@@ -204,7 +204,7 @@ const MivaLayout = class MivaLayout {
 			throw new TypeError( '[MivaLayout] - "componentTree" is not a MivaLayoutComponentTree instance' );
 		}
 
-		let settingsComponent = componentTree.findByCode( this.options.settingsComponentCode );
+		let settingsComponent = componentTree._findBy( 'type', this.options.settingsComponentType );
 
 		if ( settingsComponent != undefined ) {
 
@@ -219,7 +219,7 @@ const MivaLayout = class MivaLayout {
 		}
 
 		if ( !this.options.suppressWarnings ) {
-			console.warn( `[MivaLayout] - unable to find "settings" component "${ this.options.settingsComponentCode }"` );
+			console.warn( `[MivaLayout] - unable to find "settings" component "${ this.options.settingsComponentType }"` );
 		}
 
 		return {};
