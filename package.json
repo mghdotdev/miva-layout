@@ -1,6 +1,6 @@
 {
   "name": "miva-layout",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A set of classes to assist with working on Miva Component & Layouts based applications.",
   "main": "./dist/miva-layout.bundle.js",
   "scripts": {
