@@ -1,5 +1,7 @@
 import MivaLayoutComponentTree from './MivaLayoutComponentTree';
 import _camelCase from 'lodash/camelcase';
+import _kababCase from 'lodash/kebabCase';
+import _startCase from 'lodash/startCase';
 
 export default class MivaLayoutComponent {
 
@@ -22,12 +24,15 @@ export default class MivaLayoutComponent {
 		this.name = component.name;
 		this.type = component.component.code;
 		this.typeName = component.component.name;
+		this.typeTag = _kababCase( component.component.code );
+		this.typeClass = _startCase( _camelCase( component.component.code ) );
 		this.childrenCount = ( component.children_count == undefined ) ? 0 : component.children_count;
 		this.index = orignalIndex;
 		this.$instanceId = $instanceId;
 
 		// special attributes structure
-		this.attributes = this._createAttributes( component.attributes );
+		this.attributes = this._createAttributesWithFormat( component.attributes, _camelCase );
+		this.attributeProps = this._createAttributesWithFormat( component.attributes, _kababCase );
 
 		// special children structure
 		this.children = new MivaLayoutComponentTree( component.children, $instanceId );
@@ -105,13 +110,13 @@ export default class MivaLayoutComponent {
 
 	/* ================================ Private Methods ================================ */
 
-	_createAttributes( attributes ) {
+	_createAttributesWithFormat( attributes, formatter ) {
 
 		if ( typeof attributes == 'object' ) {
 
 			return Object.keys( attributes ).reduce(( modifiedAttrs, attrKey ) => {
 
-				let formattedAttrKey = _camelCase( attrKey ); 
+				let formattedAttrKey = formatter( attrKey ); 
 
 				return {
 					...modifiedAttrs,
